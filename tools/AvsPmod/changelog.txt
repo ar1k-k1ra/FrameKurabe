@@ -1,0 +1,3100 @@
+CHANGELOG
+===========
+
+GPo mod:
+Large Address Aware Flag is set (32bit version).
+Forked from vdcrim: https://github.com/AvsPmod/AvsPmod
+
+Modifications (Avisynth header v6) by pinterf (pfmod) 
+
+pinterf source: https://github.com/pinterf/AvsPmod
+GPo source: https://github.com/gispos/AvsPmod
+GPo releases: https://github.com/gispos/AvsPmod/releases
+Latest bug fixed Avisynth release: https://gitlab.com/uvz/AviSynthPlus-Builds
+
+##### 
+About sliders:
+ The sliders are a fine thing, but you should also use them with the right feeling.
+ Use the filter exclusion list for the sliders. The creation of the sliders is time and resource consuming, minimize this effort to what is necessary. 
+ source filters, trim, crop, addborders, prefetch, etc. can also be set wonderfully in the script.
+ And there is still the possibility to switch the list on and off in the slider window if you want to see all of them.
+
+ Slider step values can only be changed within the valid decimales of the slider values. 
+ It is not possible to set a step value of 0.5 if the slider value range is an integer.
+
+ With float sliders, it is also not possible to use a step size that does not correspond to the decimal slider values. 
+ A slider range of 0.00 to 1.00 with a step value of 0.05 is not possible (0.01 or 1.00 are the only allowed steps). 
+ Possible is: range 0.00 to 10.00 with step values of 0.01, 1.00, 2.00, 5.00, 10.00 (multible of step size must fit min and max value).
+ If you change the step to 0.1, the slider decimale will also change: 0.0 to 10.0
+#####
+About accessing Avisnth in threads:
+ Even with threads it is easy to crash AvsPmod, the avisynth.dll is coupled with the main thread, 
+ if an error is triggered by a plugin and the plugin or avisynth crashes, AvsPmod is also torn into the abyss.
+ The threads only helps if avisynth does not return.
+ Use program options > Save/Load > 'Backup session when previewing' and the accesses in threads to minimize the risk of losing the script.
+#####
+How do I sync videos with groups:
+ If a group was previously selected, delete that group first. Make sure 'Add tab to group' > 'Apply offsets' is checked
+ Go to the desired position with each video (tab), then select the same group for each video ('Add tab to group'). 
+ Now all videos should be frame accurately synchronized.
+ In addition read: Version 2.7.9.6 > 'Break group offset'
+#####
+About Avisynth filter plugins *.dll naming:
+ Please do not use strange characters in the names of the plugins. It is best not to rename the *.dll files. 
+ Avisynth and AvsPmod can have problems with it. Function names have to be assigned to the associated dll, 
+ the name has to be split and this can lead to errors. 
+ AvsPmod can only provide a user-friendly editor if he has no problems with the name of the dll and its function. 
+ If, for example, there is a '-' in the file name of the dll, AvsPmod will report it at startup, 
+ please rename this dll and replace the '-' with a '_'
+
+--------------------------
+Version 2.7.9.6 - 2.7.9.7 [2026-04-21] GPo
+--------------------------
+Version 2.7.9.7 [2026-04-21]
+* This is a bugfix version with new features.
+* Text fields in the Slider Window now have a mouse wheel value change function.
+- if the value is an integer or float, it can be changed using the mouse wheel.
+- the left mouse button must be pressed to do this. For floats, the last decimal place is changed by 1 
+- if CTRL is pressed the last decimal place is changed by 5.
+- the same applies to integer values, which can be changed in 1 or 5 steps.
+- general for edit fields: to update the preview, you must press the Enter key or focus the video window.
+* Scrolling the slider window with the mouse wheel is no longer interrupted by other controls (slider, choice box). 
+- to change a slider with the mouse wheel, the left mouse button must be pressed.
+* Fixed: If the filter database (sliders) was edited, an error could occur: 'defMod not referenced' (2.7.9.6)
+-
+Version 2.7.9.6 [2026-04-17]
+* The slider window gets a 'Reset' button for each function.
+- by default only sliders are reset to default values, if you press Ctrl while clicking 'Reset', all items will be reset.
+- only works for known functions (filterdb.dat or self-created function declarations with default values). 
+* Added playback for left mouse click. Program options > Video > 'Playback on left mouse click' 
+- 0 = disabled by default. Read the option notes before making any changes.
+- the function is not executed on the first click under various conditions: after a popup menu, when the mouse is moved, after the script has had focus. 
+- my recommendation is to set only a narrow range (bottom): 40 to 80. The mouse double click is on this area then deaktivated.
+- you can enable/disable the function under the Playback button context menu > 'Left click playback'
+* Changed frame text field: Frame history is now script (tab) related.
+- as a reminder: individual entries can be deleted by holding down the CTRL key while clicking the menu.
+* Added 'Sort history' to frame text field context menus. 
+* If all left or right tabs are changed to a group, the new selected group will now be deleted first.
+* Added Video > Tab add group > 'Break group offset': Allows setting of new offset for the tab's with the same group.
+- setting a new offset: Check it > change the frames on the tab's with the same group > uncheck it 
+- it's the same as set tab group to None > change frame > set tab group again. But we can do that now with one shortcut for all tabs with the same group.
+* Added to video slider timeline context menu "Clear all selections"
+- this menu is only visible if there are no selections under the mouse cursor, but selections are present.
+* Fixed: The checked state for menu items 'Split view alternate' was not set correctly in all menus.
+* Fixed: Fast YUVToRGB display conversion did not take matrix 601 into account and always used 709.
+* A few glitches in the filter database functions have been fixed.
+* Some updates in the filterdb.dat file, so update it!
+
+--------------------------
+Version 2.7.9.5 [2025-11-26] GPo
+--------------------------
+* Added a favorite list, you can enable it in the tablist context menu > 'Show favorite menus'
+- it is switched off by default. This feature allows you to load your favorite scripts (tabs) in one go.
+- in the favorite window simply select the scripts you want to open and press 'Return'. 
+- if the script is not in the tabs, it will be loaded from the hard disk and opened with the frame number with which it was added to the favorites.
+- if the script is not found, a dialog will be displayed.  
+- the function is complex, if there are any errors please let me know.
+- Note: Scripts can only be recognized by path and name; if you have only multiple 'New file' tabs, you won't enjoy this function.
+* if 'Show favorite menus' enabled two other menus become visible in the tablist: 'Select for preload' and 'Preload selections', what the name says.
+- if nothing is for preload selected, the current selection is used (in the tablist use Ctrl and left click for multible selections). 
+* Added to 'Script Selector' context menu 'AvsPmod preload'. Preloads the selections (only if the script are saved on the hard disk).
+* Added File > 'Save session (only opened)...', saves only the opened scripts in a session file.
+* Added to Tools > Session info tool contextmenu > 'Preload', preloads the selected scripts (only if the script are saved on the hard disk).
+* Added to menu 'Tools' and to the External player button context menu > 'Audio trim helper':
+- the function plays the audio in a loop from or to the current frame for better trimming the start or end frame (audio).
+- while the audio is playing you can change the current frame with mouse wheel or the keyboard (the video window must be focused).
+- if you do not update all AvsPmod files, you must update the "tools" folder: 
+-  "ToolsMenu.py" must be overwritten and "audio_trim_helper.py" must be located in the "tools" folder.
+* Added to the frame history in the timeline edit field: Individual entries can be deleted by holding down the CTRL key while clicking the menu.
+* Added to (popup timeline) selections context menu  > 'All to clips'
+* Added to (popup timeline) selections context menu: copy to clipboard for the frame range menu, eg. 12-128 (click on the menu copys '12, 128' to clipboard)
+* Some fixes
+
+--------------------------
+Version 2.7.9.4 [2025-03-01] GPo
+--------------------------
+* Further changes for the avisynth API 11:
+- e.g. if AvsPmod was terminated and the memory was exceeded (to many scripts opened), it could happen that AvsPmod did not terminate. 
+- for API 10 and before a Destroy() call was sufficient which could lead to problems with API 11
+
+--------------------------
+Version 2.7.9.3 [2025-02-13] GPo
+--------------------------
+* Further adjustments for Avisynth API 11
+
+--------------------------
+Version 2.7.9.2 [2025-02-12] GPo
+--------------------------
+* Fixed Version that is now working with newer Aviynth API 11 Versions. RIFE should also no longer cause any problems.
+The thanks go to pinterf.
+
+--------------------------
+Version 2.7.8.9 [2024-12-23] GPo
+--------------------------
+* Transfer and matrix names added, thanks to FranceBB.
+* Added Program Options > Misc 2 > 'Disable DPI awareness*'. Workaround for Linux Wine incompatible Windows DPI awareness.
+- if you use higher DPI values in Wine and display errors occur, this option must be set.
+* Added an option to deactivate the highlighting of the current tab with a blue number sign (Program Options > Misc > 'Highlight the current tab #').
+* Bugfix: if raw frame data was read for PNG 16 bit or for macro pipe functions with yuv4mpeg2 header.
+* Bugfix: an 'UpdateTabImages' error could appear.
+* Some other small fixes
+
+--------------------------
+Version 2.7.8.8 [2024-11-16] GPo
+--------------------------
+* The selected tab shows now an image with blue sign #
+* New macro monster 'TopazEncode.py' for AvsPmod 2.7.8.8 and later (Help > 'Video tutorials & more'), more info in the macro itself.
+* Added macro type 'button' the event is the first default value, more in the macro readme.
+* Added to macro function GetTextEntry the parameter 'getControls'
+- returns the dlg itself and the insertet controls in a dict with tuple values and int key numbers, more in the macro readme. 
+* Bugfix Script Selector: a 'key error' may occur when closing the script. 
+* Bugfix: RunExternalPlayer (macro: Preview from current point)
+* Bugfix: when macros showing MsgBox with 'Cancel' button, the result was always False.
+* Bugfix: MediaInfo window when auto close was turned on an error could occur.
+* Some small fixes.
+
+--------------------------
+Version 2.7.8.7 [2024-10-18] GPo
+--------------------------
+* The editor and the tabs have been given a new context menu entry. 'Preload script':
+- 'Preload script' menu is only visible if Avisynth version greater then 3.7.3 or Version is 3.7.3 and release is greater r4070 
+- you can get working versions from here: https://gitlab.com/uvz/AviSynthPlus-Builds
+- the function creates the clip of a script (tab) in the background and shows a progress dialog. 
+- one clip after the other is created when scripts (tabs) are added with 'Preload script'.
+- before each run, the available memory is checked and if it is less than 2001 MB, a dialog appears asking whether to cancel.
+- if in the progress dialog the 'Cancel' button is clicked, all pending processes are deleted and the dialog closes after the current process has ended.
+- a running process cannot be aborted directly, you have to wait for Avisynth to return.
+- if the process does not end (Avisynth does not return), only a program restart can help.
+- It should also be clear that other processes such as playback will slow down while clips are loading in the background.
+- Since source filter indexers do not consume as much CPU power, they should be well suited for this purpose.
+-
+* New option: Options > 'AvsPmod & Avisynth test'. Test AvsPmod and Avisynth. More in the dialog that appears.
+- info: 'Preload script' uses also this option. The Analysis passes not.
+* Flickering on showing the separate video window reduced and if it minimazed it will now restore the size and shown.
+* Separate video window resets now the zoom and position after maximazed and restored with a dbl. click if 'Save view pos on tab change' checked.
+* Video > Tools > 'Locate frame' reworked: read the Locate frame readme.
+* Split View shows an Indicator (marker) in the timeline. If the parent tab selected (the left tab) then green else blue color. 
+- the indicator distance to the video slider indicates the frame distanze in the not selectet Split View tab (if you not see it, the distance is to small). 
+- if you click on the indicator the tab will change if not 'Freeze frame' enabled. Use Video > Tools > 'Locate frame' to turn on/off 'Freeze frame'.
+- Note: in the status bar right side is the accurate frame distance displayed.
+* 'Run analysis pass' can now run a single pass wihout a frame loop (only initialize the clip). Do use it: Press Ctrl before clicking the menu.
+- background: there are functions, e.g. the SceneLog DBSC from StainlessS that runs through its own frame loop and then returns the result or writes it to a file.
+* Changed: If the script was on a USB drive, for example, and the device was not connected when loading a session, 
+- the path was removed from the file name and reloading the script was no longer possible, even after connecting the device.
+* The 'SceneLogToBookmarks' and 'Run analysis paas' macro has been updated (see Run analysis pass) and other macros (Help > 'Video tutorials & more') have been added.
+* Update AvsPmod 'About' dialog
+* Fix: When AvsPmod was used with Wine, it could be that the script text was not displayed.
+* Bugfix: Copied bookmarks could be 0 after paste it into the timeline and then you delete the bookmarks in the timeline.
+* Bugfix: Drag & Drop files causes an 'UpdateTabImages' error.
+* Bugfix: Media Info Dialog can cause an 'KillFocus' error if auto close enabled.
+
+--------------------------
+Version 2.7.8.4 - 2.7.8.6  
+--------------------------
+Deleted
+
+--------------------------
+Version 2.7.8.2 - 2.7.8.3 [2024-09-29] GPo
+--------------------------
+* Added Trim Dialog context menu 'Don't close on 'Apply', does not close the Trim Dialog after pressing 'Apply' (User wish).
+* Added Video > Bookmarks > Copy/Paste bookmarks. Copies or paste bookmarks direct from/into the timeline.
+* Added Video > Navigate > Goto selection next/previous. For same functionality you can also press Shift on other bookmark jump controls 
+- eg. video control button or mouse browse buttons forward/backward (Aux1, Aux2).
+- Note: if more then one tab opened and tab switching with the mouse browse buttons enabled (Program options > Misc > 'Mouse browse buttons'), 
+- you can then jump bookmarks if the mouse in the video slider or status bar area or inside the slider window or Ctrl or Shift is held down. 
+* Added direct setting a selection mark start\end without showing the trim editor. 
+- when right clicking the video slider press Ctrl for selection start and Shift for selection end (else default bookmark).
+* Added 'Locate frame' text label 'Start' and 'Stop' sets on clicking selection start or stop without showing the trim editor. 
+* Added to templates Options > 'Apply filter...' function 'ClipClop', ClipClop.dll @StainlessS is required.
+-- for copy and paste if needed (for current options), open Options > 'Apply filter...' and make new entries:
+Entry name: 'CLipClop copy'  (for process single selection, name can be changed and preview filter flags can be removed)
+/**avsp_filter
+%*%join%copy
+ClipClop(last, r1, sCMD="r1(%start,%stop)")
+**/
+Entry name: 'ClipClop copy *'  (for process all selections, name can be changed and preview filter flags can be removed)
+/**avsp_filter
+%*%join%copy
+%> r1(%start,%stop);
+ClipClop(last, r1, sCMD="%insert")
+**/
+--
+* Bugfix: Trim Editor save/restore the position only works when closing the dialog, but not on 'Apply'
+- if you press Ctrl on mouse down, the transparent value doesn't change (for nicer setting the transparent value).
+* Bugfix: Bookmark difference warning didn't work.
+* Bugfix: If "Tab change loads script bookmarks" was disabled, the tab bookmarks were not displayed in the timeline when switching tab.
+* Some other changes.
+Version 2.7.8.3 
+* Bugfix: bookmarks not added if separate video window enabled. Sorry this was since 2.7.8.0
+* Apparently a double release is becoming a habit ,)
+
+--------------------------
+Version 2.7.8.0 - 2.7.8.1 [2024-09-01] GPo
+--------------------------
+* The reason for this version 2.7.8.1 is that due to the new bookmark handling some macros no longer work properly, 
+- instead of changing all macros the problem was fixed in this version. Sorry.
+* Added automatic loading of the function 'LocateFrames'. 
+- if the function 'LocateFrames' is not found when executing 'Locate frame', it is imported from the specified file. 
+- Program options > Path > 'Function LocateFrames import'.
+* 2.7.8.0
+* Bookmarks handling reworked. There should be no more incorrect assignments.
+* Loading sessions and files has been reworked and should now be faster (Dogway?, for me 200 scripts 10sec).
+* Improved Tablist update: If the tab list is visible, the entries should now always be up-to-date (bookmark count is only on show and tab change updated).
+* Tablist Execute menu: added Separator and Submenu. Use '-' for an separator and '>Name of menu' for indicate to put the next entrie in this submenu, indication of end is <
+- example: Save script|File -> Save script, >My Submenu, Bookmarks to script|Video -> Bookmarks -> Bookmarks to script, <, next entrie in main context menu 
+* Added to 'Script Selector' context menu:
+- 'Search in scripts...', searches in all scripts for the given text (good for finding functions that you have used before).
+- 'Find only new from avs...' searches for new scripts (names) that are not present in the data and does not update other scripts.
+- Edit > 'Search in Notes...', searches in all Notes for the given text.
+- Edit > 'Change note...', now with multiselection and @ linked tabs.
+- Options & Additional > 'Selections distribute all', distributes all values (script, markers, note) from this entrie to all entries with the same file (path,name).
+* 'Script Selector' can now show the saved scripts (double click Path or -20 pixel Name). You can copy the text but the script cannot be saved.
+- for this function there is also an option Option & Additional > 'Same size on showing scripts'
+- note: linked @tabs processes the linked entries. If you delete the link, the linked entry will also be deleted.
+* The Trim Editor got a context menu and can now save/restore it's position and can be made transparent (Hold down the left mouse button and move to the left or right).
+- known bug: if the AvsPmod option 'Always on top' is set, the trim editor is overlaid by the program window. (no fix at the moment).
+* Added to MediaInfo context menu 'Auto close' 
+* Function 'Locate Frame' revised:
+- no more variables or selections required (optional but possible) always the next script (the right one) is used for finding the frame.
+- there is now an dialog for start, stop, threshold and 'Split View freeze frame' settings. 
+- more in the 'Locate Frame' readme.
+* Fixed: The tab's reactions became slower when many files were open (>100) and no multiline tab style and tab images were enabled.
+* Bugfix Macro 'PreviewEncode.py': The encoded clips were entered twice in the script. 
+* Some other changes.
+
+--------------------------
+Version 2.7.7.9 [2024-08-11] GPo
+--------------------------
+* Another update for the 'Script Selector': Added to context menu Options & Aditional > 'Find dups', 'Find dups (dif) and 'Find dups (same tab)'. 
+- 'Find dups' shows all duplicate entries and 'Find dups (dif)' only duplicate entries with different script text. 'Find dups (same tab)' shows duplicates if the entries in the same tab.
+- '@ dups' tabs are read-only, but the entries referred to the other tabs can be updated with 'Update selection from avs'.
+- and a double click on an entry in the '@ dups' tab opens the linked tab.
+* Removed del protection from the 'Script Selector' search tabs (this was not the intention, only the entries should be protected against deletion) ,)
+* Who uses AvsPThumb: In the 'Script Selector' several list entries can now be opened at once (multi selection) with AvsPThumb.
+* Bugfix: On closing the 'Script Selector' the application loses the focus.
+* Bugfix Tablist: Error avsp.pyo line 4931 in OnGetItemTextColour: invalid item index in GetItemState.
+* Bugfix 'Separate Video Window': Trim Editor error and zoom fit/fill fixed.
+* Added some voices in the sound directory (They can be exchanged, only the name must be the same).
+- if you do not like it, remove the sound directory or the voice file. But I find it more pleasant than a Bell without a hint or a MessageBox when it is not needed.
+- there won't be come many.
+
+--------------------------
+Version 2.7.7.8 [2024-08-03] GPo
+--------------------------
+* Added directory 'sound' in the program folder. Please unzip it into the AvsPmod folder if you do not unzip everything.
+* In the Tablist context menu there is an entry 'Execute menu'. You have to configure this entry yourself, read Help > 'Tablist readme'.
+* Script Selector has been updated. There is now a simple search function and the tabs got a context menu.
+- the search function finds scripts by name (wildcards * and ?) and displays found scripts in a new tab.
+- these tabs are write protected, you cannot add elements or update these tabs.
+- to reduce the amount of data, you should delete these tabs when they are no longer needed (tab name starts with @).
+* Changed: The window state from maximized to normal now restores the script height or (video height when zoom fit/fill).
+* Bugfix: An error could occur when changing the window state from maximized to normal.
+* Bugfix audio playback: Unknown error float/int fixed.
+* Bugfix: If the program was closed and a script was saved, an error could occur if the 'Tablist' was open.
+* Bugfix: Resize filter was not removed from all scripts when setting a manual zoom value.
+* Some other small corrections.
+
+--------------------------
+Version 2.7.7.7 [2024-07-20] GPo
+--------------------------
+* Bugfix: 
+Resample Filter could under certain circumstances, depending on the video source and filters used, get into a resize loop and block everything.
+For me, this was only the case with a corrupted 4K video and with MCTemporalDenoise with settings 'High' and 'Very High'. 
+
+--------------------------
+Version 2.7.7.4, 2.7.7.5, 2.7.7.6 [2024-06-19] GPo
+--------------------------
+* 'Resample filter' is restored after an error clip.
+* Closing a tab using the 'Tab list' will no longer force an adjacent uninitialized tab to open.
+** Added to 'Tab list' new functions:
+- context menu 'Show Bookmarks'
+- context menu 'Auto close' closes the 'Tab list' if the Focus is losen (except see below 'MediaInfo').
+- if you have AvsPThumb, a double-click on the bookmarks column row will run AvsPThumb and displays or reads the bookmarks stored in the script.
+- if you click a line in the first 15 pixels, a tooltip appears and if you hold Ctrl a window appears with the result of MediaInfo.dll.
+- font and color is the same as for the 'Scrap Window' or German 'Ablage Fenster' and the font should be Mono Space (Options > Font & colors).
+-- Prerequisite: MediaInfo.dll must be found in the system (system directories or the AvsPmod directory). The source file must be findable in the script (see below).
+-- Info: Multiple MediaInfo windows can be opened (context menu 'Single instance'), and as long as a MediaInfo window is open the 'Tab list' does not close automatically.
+-- MediaInfo.dll: https://mediaarea.net/de/MediaInfo/Download/Windows ( Choose DLL without installer: 7z, zip )
+* Added default encoder_gui presets (your own presets will no longer be overwritten by a new version, thanks to @silverbacknet on github)
+* Fixed video slider flickering when there are a large number of bookmarks.
+* When saving a new script, the source file extension is now included as the suggested name ( Test.mkv.avs ). 
+* When saving a new script the source file name is now also found with the script syntax below (SourceFile and : or = must also exist):
+-- SourceFile = ScriptDir() + "Test.mkv"  (no drive no path, this is also not found)
+-- SourceFile = Exist(SourceFile) ? SourceFile : "E:\Video\Test.mkv"  (this is found and valid if the file exists)
+-- video=LWLibavVideoSource(SourceFile)
+- if the source name was not found, then a search is made for: Drive + Path\Filename + Extension enclosed in " "
+- extensions are '.avi','.mkv','.mp4','.mpg','.mpeg','.ts','.mts','.m2ts','.vob','.webm','.wmf','.mov','.mxf'
+* Bugfix macro 'Save Image Sequence.py', also thanks to @silverbacknet.
+* Bugfix and update macros 'PreviewEncode.py' (and 'PreviewEncodeThread.py' on Google drive).
+* Bugfix macro 'DeleteEncodings.py'
+* When AvsPmod is closed, it searches for open dialogs and destroys them (prevents AvsPmod from running a background process after closing).
+*** Reminder: Tab list is also accessible with a right click in the right area (20 pixels) of AvsPmod's Display, Editor and Slider-Sidebar (except D3DWindow).
+* Version 2.7.7.5: Discovered a bug that has probably always existed. 
+- When closing a tab, a serious error occurs when the Crop or Trim dialog is open. Has been fixed in this version.
+* Version 2.7.7.6: Forgot to delete entries from the tests in the code. When saving the script a message 'found' could be displayed. Sorry.
+
+--------------------------
+Version 2.7.7.3 [2024-04-20] GPo
+--------------------------
+* Audio mixer values for mix of left/right and center lowered (clipping minimized).
+* Switching the 'Preview Filter' on/off is now faster if no change was made.
+* Bugfix: tab context menu 'Close... > 'All unopened', either Error or tabs were no longer visible.
+* Fix: Resize video window > 'Force' no resize if 'Split Clip' was used and the video dimensions changed.
+* Fix: RGBPS/RGBPSA values -1, -1, -1, -1 were treated as errors.
+
+--------------------------
+Version 2.7.7.2 [2024-04-07] GPo
+--------------------------
+* The script/video window splitter functionality has been revised.
+* There are 3 video window resize modes ( Force, Normal, Static )
+- Force: Resize if video size or normal zoom has changed. With Zoom or Resample fit/fill, the size of the video window does not change when switching tabs.
+- Normal has 3 options, Program Options > Video > 'Video window resize option (only mode Normal)' 
+--- Zoom or Size change: Resize when video size or zoom has changed.
+--- Size change: Resize if video size has changed (Includes also zoom resample).
+--- Zoom change: Resize if zoom has changed.
+--- No for both: No resize, each tab (script) keeps the manually set splitter position.
+--- if not 'No for both' and the video is smaller then the video window, the splitter moves down if not zoom or resample fit/fill set.
+- Static: No resize, the splitter is set by the first initialization or manual script/video window splitter moving for all tabs.
+*** Exceptions for all settings: when groups are assigned, all tabs in that group have the same splitter position when switching tabs.
+*** If something is wrong, report it immediately. In 2 weeks I won't be able to see through it anymore..)
+------
+* Under Program Options > Video > 'Keep video window size if zoom fit/fill (only mode Normal)' 
+- you can select whether the size of the video window should be retained when Zoom or Resample Fit/Fill is set and the tabs are changed (default Off).
+* Under Program Options > Video > 'Double click on MaxView resets to minimum text lines' you can set what position the splitter should take
+- on a double click into the video window when zoom or resample fit/fill is used (not for Static), 
+- either the last position before MaxView (double click at normal size), or the minimum text lines that you have set.
+* A double click on the script/video splitter sets the splitter to original video size (max. minimum text lines). 
+* In the event of an error message, the video window is minimized and the zoom factor is set to 100%, but is restored (not resample zoom) upon reinitialization.
+* The 'Resample zoom' menu entries processes now all scripts by default. If Ctrl is pressed only the current script is processed. 
+** The menu items of the resample zoom, 'Resample fill' and 'Resample fit' have been changed by name. 
+-- you must create new shortcuts (Fit is now Fill and vice versa).
+-- the names were wrong from the beginning and did not match the normal zoom Fit/Fill. Sorry. 
+
+--------------------------
+Version 2.7.7.1 [2024-03-16] GPo
+--------------------------
+* After an error message (error clip), the previously used zoom is restored (factor, fit, fill, position).
+- however, the 'Resize filter' is not restored.
+* When 'Resize video window' is disabled, the size of the video window is now more stable and will not reset on an error clip.
+* When 'Resize video window' is enabled and no 'Resize filter', zooming with the mouse wheel now also changes the size of the video window.
+* You can now set the script's minimum visible text lines on the fly (Program options > Text > 'Min text lines')
+- with the script context menu Miscellaneous > 'Set min text lines (Ctrl + splitter move)'
+- or press Ctrl and move the video/script splitter (first press Ctrl to unlock then move the splitter and release Ctrl).
+* Bugfix: if 'Resize video window' is disabled and switching between fullsize and normal view, the normal view was set the wrong splitter position.
+
+--------------------------
+Version 2.7.7.0 [2024-03-02] GPo
+--------------------------
+* Audio downmix is now mixed to stereo using its own mixer (with Avisynth mixer there were problems with prefetch and multichannel).
+- the audio volume values have changed, now 0.25 to 2.0, the value 1 corresponds to 100%, 
+- the value 2.0 is slightly less than twice the volume, approx. 7 decibels (setting per script).
+* The values of the audio buffer have also changed, now 1 to 6 seconds. 3 seconds as default.
+* The mix portion of the center channel can be done under Playback button context menu > 'Audio settings'. Default 0.7 (global for all scripts).
+* The menu Play > 'Downmix audio' has been removed, it is now located under Audio settings.
+* Audio playback is now also possible with the preview filter switched on.
+* The macro 'Save as Tiff_rgb48' has been replaced by 'Save Image_rgb48'. It can now be saved as tiff or png (requires ffmpeg.exe).
+* Some minor corrections and cleanups (e.g. option 'Playback in threads' removed).
+
+--------------------------
+Version 2.7.6.9 [2024-02-10] GPo
+--------------------------
+* Audio playback bugfix: Audio can stop playing. 
+
+--------------------------
+Version 2.7.6.8 [2024-02-03] GPo
+--------------------------
+* Playback reworked.
+* Added 'Tab list' context menu entries (Free memory, Other free memory, Close), this always refers to the current tab (the yellow one).
+* Fix: Audio playback was stopped when 'Timeline Range' was set.
+
+--------------------------
+Version 2.7.6.7 [2024-01-21] GPo
+-------------------------- 
+* Added Program Options > Misc 2 > 'Change cursor in zoom action area' 
+* 'Tab list' focus flickering improved.
+* D3DWindow audio playback improved (was bad when the video fps was not reached).
+
+--------------------------
+Version 2.7.6.6 [2024-01-06] GPo
+-------------------------- 
+* Playback option Drop frames 'Auto' is now set more aggressive.
+- however, i have noticed that with filters that do not like large frame jumps it can take a long time until a new frame is drawn... can't be changed.
+* Added tab context menu > 'Tab list' 
+- 'Tab list' is for those who have many tabs open and don't want to use 'Multiline tab Style' and don't like the 'Script Selector'.
+- 'Tab list' is also available with a middle mouse click on a tab if the option is selected under Program Options > Misc > 'Middle mouse on tab'. Enabled by default.
+- furthermore, the 'Tab list' is available in the video window and the script editor on the right side (25 pix) and on the slider window button with a right mouse click.
+- you can use the mouse forward/backward buttons to jump to the previous tab. 'Tab list' closes automatically when the focus is lost.
+- the settings for the font can be found under Options > Fonts and colors' > Advanced 2 > 'Tab list window'
+
+--------------------------
+Version 2.7.6.5 [2024-01-02] GPo, Dire Straits Edition
+--------------------------
+* Playback with audio now runs smoothly even if the video fps is not reached.
+* Added and changed audio options. 
+- 'Audio only when Video setting is normal speed' - 'Audio rate always 100%' - 'Audio speed equals Video speed when Video speed 100% or less'
+** Hint! My audio card works with all sample rates down to 1000 Hz, if problems occur the option must be changed to the first or second option.
+- the settings and the settings for the audio buffer can be found under Video > Play video > 'Audio settings...' and in the Playback butten context menu.
+* The audio buffer setting is now in milliseconds (200 to 2000), default 500 (buffers = ms/1000*framerate) eg. for 25fps round 13 frames.
+* Drop frames 'Auto' (playback butten context menu > Drop frames... > 'Auto'):
+- if drop frames 'Auto' is set, the audio buffer increase automatically up to 200 frames if a audio dropout detected (10 frames step).
+- play back speed cannot higher as 100%, if Maximum speed is set, drop frames 'Auto' is not used.
+- and one more thing, drop frames 'Auto' is a special function and should only be used if the audio should have priority (but then it is a nice function).
+* Added play back butten context menu > Speed x > '0.25x'
+
+--------------------------
+Version 2.7.6.4 [2023-12-27] 
+--------------------------
+* Audio playback revised.
+- under Video > Playback > 'Audio buffer count...', the number of buffered frames can be set. 
+- a lower value results in a faster response when playback is jerky. Default 6
+
+--------------------------
+Version 2.7.6.3 [2023-12-26] Happy new year to everyone.
+--------------------------
+* Fix: Video\Audio syncronization could run out. 
+
+--------------------------
+Version 2.7.6.2 [2023-12-24] Merry Christmas to everyone.
+--------------------------
+* Audio playback improved. hanfrunz Christmas script (2023) now run without any dropouts ,) https://forum.doom9.org/showthread.php?t=185220
+- audio playback is now disabled if playback not Normal speed (Halfspeed, Maximum etc.).
+* Added Video > Zoom > 'Disable Fullscreen zoom'. Interesting for comparing 4K videos with 100% zoom on smaller monitors (on startup allways disabled).
+- Note: if you change the tab on Fullscreen, the last zoom and position is used if 'Save pos & zoom on tab change' checked. 
+* In full screen mode, the filename and zoom settings are displayed when you move the mouse all the way up (first 5 pix).
+* D3D Window automatically turns off drawing of the normal window when it is in fullscreen or fullsize mode.
+- you can now always set 'Playback both' without losing speed when the D3D display is fullscreen\fullsize.
+* Encoder_gui.py (Tools > Script encoder CLI) now remembers the last desktop position.
+- if the whole archive is not unpacked, the old file encoder_gui.py in the tools folder must be replaced with the new one. 
+* Added ffmpeg x264, x265 and AV1 presets for Script encoder CLI: 
+ - x264 lossless medium, x265 lossless medium, svt-av1 CRF Slower, svt-av1 CRF Slow, svt-av1 CRF Medium, av1_nvenc VBR, av1_nvenc CQP
+- Suggestions for improving default encoder settings are welcome!
+
+--------------------------
+Version 2.7.6.1 [2023-12-01]
+--------------------------
+* Fix: The resample filter sets the wrong size for 'Fullsize' when double-clicking in the zoom action area.
+* Another Bugfix for the 'Script Selector'
+
+--------------------------
+Version 2.7.6.0 [2023-11-28]
+--------------------------
+* Fullsize mode uses now the zoom settings from Fullscreen mode. (Program settings > Misc 2 > 'Fullscreen\Fullsize zoom').
+- but only if the fullsize is activated by a double click with the mouse in the zoom action area. 
+- when activated via a shortcut or menu, the current zoom is used. 
+* Video Window hide scroll bars is now as default enabled (Options > 'Hide video window scrollbars').
+* Zoom with mouse wheel overrides the zoom 'Fill' or 'Fit' settings (you can now always zooming with the mouse wheel).
+* New zoom menu entry 'Custom', acts only as Indicator if the current zoom not in the other fixed value menus.
+* Zoom action area: 'Resize single' and 'Resize all' changes the color yellow or blue depending on the function.
+- if it is yellow, the resize filter is switched on when double-clicked, and switched off if it is blue.
+- is it preceded by a +, this indicates that the global resample filter is switched on, i.e. that the resample is active every time a new tab is opened.
+* Some small other changes
+
+--------------------------
+Version 2.7.5.9 [2023-11-21]
+--------------------------
+* Program Options > Save/Load > 'Force Avisynth UTF-8 encoding' (pass the script to Avisynth always UTF-8 encoded else system locale or UTF-8)
+- as already mentioned: Some source filters do not work with UTF-8. See version 2.7.5.7 below.
+- my recommendation is not to use it and encode whether system locale or UTF-8 automatically.
+
+--------------------------
+Version 2.7.5.8 [2023-11-19]
+--------------------------
+* Program Options > Save/Load > 'Force UTF-8 encoding on saving the script' (for the sake of peace).
+- as already mentioned: Some source filters do not work with UTF-8. See version 2.7.5.7 below.
+* New Video information entry 'Script Avisynth encoding', 'UTF-8' or 'System locale: xxx'
+
+--------------------------
+Version 2.7.5.7 [2023-11-18]
+--------------------------
+* UTF-8 changes:
+- The encoding for the Avisynth script transfer is now set for each script depending on the content in the script. 
+- No default UTF-8 can be used, that would be wrong and cause problems with source filters that cannot use UTF-8. 
+- e.g. DirectShowSource does not work with UTF-8 depending on the country setting and the characters it contains. 
+------
+* Video > Video information new entry 'Current script UTF-8 encoded', 'True' or 'False' or 'True with BOM'.
+* New Menus: Video > Groups > 'Change current group...', 'Change current/left tabs group...', 'Change current/right tabs group...'
+* Group assignment improved: It is now possible to set the group of the tab to None, change the frame number and reassign it to the group.
+- was not possible before and messed things up.
+* Mouse pointer now changes when it is in the area of a zoom action (50 pixel area left or right), e.g. fullscreen, fullsize, resample zoom.
+* If the mouse is in a zoom action area, action is displayed as a hint. Program options > Misc 2 > 'Show hint for the zoom action area' default enabled.
+- available options: 'Off', 'On - staticaly', 'On - auto hide'
+- if 'Reset' is displayed, it is the same as with a double click outside the action area. 
+* New statusbar popup menu entry 'Free scroll range', Complete timeline area can be scrolled (on status bar) without having to press Ctrl.
+- Reminder status bar (timeline range): 
+-- double-click left or right to move the timeline area, middle mouse click returns to frame position, Shift pressed increases the scroll rate
+-- focus on Video Window: if the Ctrl + Alt keys are held down, the Up or Down key moves the timeline area.
+* New tab popup menu entry: Close... > 'All unopened', closes all tabs that are not initialized.
+* Slider context menu new entry: 'Timeline range...' if statusbar is not visible (fullscreen) you can now show the context menu 'Timeline range'.
+- or press Ctrl when right-clicking on the slider area.The timeline context menu will then also appear. 
+* Resample zoom filter menu now on as default. 
+* Fix: In fullscreen mode, not all shortcuts for "Next tab", "Previous tab" or "Previous selected tab" worked (e.g. F1..F12).
+* Fix: If the 'Close all right' or 'Close all left' tabs menu was used, the bookmarks of the current tab were also deleted.
+* 'Script Selector', another bugfix. 
+* Minor other modifications
+
+--------------------------
+Version 2.7.5.6 [2023-11-18]
+--------------------------
+deleted
+
+--------------------------
+Version 2.7.5.5 [2023-10-22] GPo
+--------------------------
+* New Trim Editor function: Bookmark range to selections (the trim editor must be visible for this).
+- if you press Ctrl while clicking the slider, you set the selection in the range from the previous/or current to the next bookmark.
+- if 'Bookmark range -1' is checked in the trim editor, the end selection is shortened by one frame (useful for scene change bookmarks).
+* UTF-8 file names can now be used in the script, but do not mix extended ascii table (german umlauts) and utf8 (eg. japanese name) in one script. 
+* Fixed: error handling on creating a clip.
+
+--------------------------
+Version 2.7.5.4 [2023-10-04] GPo
+--------------------------
+* Some fixes e.g. 'Run analisys pass' error handling, bugfix 'Script Selector' and more.
+
+--------------------------
+Version 2.7.5.2 - 2.7.5.3 final [2023-08-20] GPo
+--------------------------
+v2.7.5.3
+* Video > Tools > 'Script selector' finished, read the readme
+* Bugfix: D3D Window
+* Bugfix: Frame properties window
+* Bugfix: timline Bookmarks on tab change not set if 'Read from script' disabled or no bookmarks saved in the script.
+v2.7.5.2
+* New docking option for the frame properties window when 'Separate window' is selected in the options.
+- if the docking option is selected (default), the window docks at the bottom-left of the main window.
+- free space bottom 50 pixels for the double click action 'd3d window fullsize'.
+* New docking option for the D3D Window (dock on video window).
+-   My recommendation: top-right or bottom-right
+-   Enabling: move the window in the desired monitor corner more then half size of the window outsite the corner.
+-   Disabling: d3d window context menu Additional > 'Disable docking'
+* Improved moving the d3d window with the mouse (sometimes no response at first mouse botton down).
+
+--------------------------
+Version 2.7.5.0 - 2.7.5.1 [2023-07-27] GPo
+--------------------------
+* Hardware Accelerated (GPU) renderer window (reade the Help > D3D Window readme).
+- the d3d renderer uses YUV420P8 (YV12) for all color formats. Only if the clip is RGB32 then ARGB8888 is used.
+- No one AvsPmod filter can be used, only 'Split Clip' can be used. Or the clip must be RGB32.
+- Existing functions and shortcuts: 
+-   double click=fullscreen or not, mouse forward-backward=bookmark next-previous, mouse wheel=frame step, 
+-   numpad 4,5=frame step, numpad 2,8=jump custom units, numpad 0 or numpad . or middle mouse = Close
+-   minus key=toggle'Split Clip', key b=add remove bookmark
+* Added: Direct3D context menu with some options (e.g. you can hide the title bar and borders). 
+* Added: Video > Play video > 'Direct3D safe'. 
+- renders safer but slower (ColorBars YV12, FHD 794fps, FHD safe 238fps, ColorBars UHD YUV420P10 141fps and safe 104fps).
+- enable the safe mode only if you get errors on the fast mode (fast mode runs fully threaded).
+* Added: New double click layout for the video window, see below or reade the D3D Window readme.
+* Added: Play button context menu 'Speed x' 2x up to 16x
+* Changed: 'Prefetch display conversion' from Prefetch(2,2) to Prefetch(1,1). Slower but safer.
+* Changed: The Preview filter doesn't disable 'Fast YUV420 display conversion'.
+- Remember: if the "Fast YUV auto reset" option is selected, the fast YUV conversion will be disabled when the script is changed or refreshed. 
+* Bugfix: When creating audio and preview filter enabled.
+* Bugfix: When an error clip was created it could lead to a code error.
+* Bugfix: In case of a 'Display Filter' error, clip error was not reset when the 'Display Filter' was switched off (refresh was needed).
+v2.7.5.1 Bugfix: Playback with D3DWindow and simultaneous actions in normal video window led to blocking of the program.
+-----------------------------------------------------------------------
+Video window fullscreen/fullsize doubel click layout left 0 to 50 pixel: (Not D3D Window)
+___
+d3d fullscreen (top start, 0)
+___
+normal fullscreen (top start, 51 pixel)
+___
+normal fullsize (top start, half height)
+___
+d3d fullsize (top start, height - 50 pixel)
+___
+
+Video window doubel click layout right, width -50 pixel:
+___
+Resample Filter current script (top start, 0)
+___
+normal fullscreen (top start, 51 pixel)
+___
+normal fullsize (top start, half height)
+___
+Resample Filter all scripts (top start heigth -50 pixel)
+-----------------------------------------------------------------------
+
+--------------------------
+Version 2.7.4.7 - 2.7.4.8 [2023-06-03] GPo
+--------------------------
+* Audio playback is now WinXP 32bit compatible
+* Fast VUV > RGB conversion (DecodeYUVtoRGB.dll, DTL Doom9) now also for 32 bit available.
+* Added: Options > Font & Colors > Mis 2 > 'Video controls frame text field bold', use bold font style or not.
+* Added: avisynth 'DelayAudio' as a slider to filterdb.dat
+* Minor bugfix audio: In the playback, an attempt was always made to create the audio, even if the video did not contain any audio.
+* Bugfix 2.7.4.8: When clicking in the "Video" menu bar, an error is displayed if the video (clip) is not initialized. Sorry.
+
+--------------------------
+Version 2.7.4.6 [2023-05-27] GPo
+--------------------------.
+* Play Thread revised:
+- under WinXP the frames were played 2-3 frames slower than the intended fps for the video (I hope fixed).
+- under Win10 64bit the maximum fps is about 10% higher on my system (FHD no filter). 
+* Video > Display, 3 menu items added.
+- 'Prefetch RGB display conversion' and 'Fast YUV420 display conversion' and ' - fast YUV auto reset'
+- Prefetch RGB display conversion: uses Prefetch(2,2) for the default (precise) RGB32 conversion (I recommend to turn it on, default).
+- Fast YUV420 display conversion: function 'DecodeYUVtoRGB' must exist (DecodeYUVtoRGB.dll) and CPU instructions AVX2 available.
+- if DecodeYUVtoRGB used, prefetch is disabled. So both can always be switched on.
+- the fast YUV decode will be always disable if: Preview Filter used or on clip refresh the option ' - fast YUV auto reset' enabled.
+- if function DecodeYUVtoRGB not found, the function is loaded from AvsPmod dir if the Dll exist.
+* Added CPU AVX2 availability check. If not, fast YUV decoding is disabled. Also disabled on x86 (no x86 DLL).
+- Big thanks to DTL and all contributors for this plugin. Also pinterf will improve the precise YUV to RGB32 conversion. Thanks.
+* Bugfix: Split View can get error on insert new tab and the video dimensions mismatch.
+* Bugfix of Bugfix: Fullscreen mode, if video dimensions equal to monitor dimensions.
+* Improved error handling for some conditions.
+
+--------------------------
+Version 2.7.4.5 [2023-05-06] GPo
+--------------------------
+* Added audio playback, for full Info please read the readme_audio.txt
+- for faster playback: use 'Split Clip' and put Prefetch after the 'Resample Filter', see below (Options > Resample Filter)
+* Added audio scrubbing (audio sound while video frame is scrolling)
+* Added to play button context menu:'Play audio', 'Audio scrubbing', 'Audio scrub count'.
+* Added to Video > Play video > 'Play audio', 'Play scrub', 'Audio scrubbing', 'Downmix audio' (make a shortcut for 'Play scrub').
+* Added to Play button context menu 'Audio volume'. increase/decrease in Decibel.
+- Note: There is no level limiter, the audio can get clipping. 
+* Added Options > 'Prefetch display conversion' (Test it, I have it enabled).
+- the function uses Prefetch(2,2) for RGB conversion for the display. 
+- this speeds up the video frame drawing by about 1 to 30% depending on the color format. So also the playback.
+- if this function is switched on, the prefetch for the 'Resample filter' (see below) is superfluous and therefore not used.
+* Resample Filter (resample zoom):
+- it is now posible do use another function after the resample filter, the function must be writen after the resizer separated by a semicolon.
+- example: Spline36Resize;Prefetch(1) or Spline36Resize;sharpen(0.2).Prefetch(1) is also posible.
+- use prefetch after the resizer for more playback speed when the 'Resample Filter' is enabled.
+* The External Player button has got a context menu in which the function of the button can be selected (External Player, Audio scrub).
+- audio scrub will play min 36 video frames or 48 if audio scrub count 48 
+* Added Menubar > Options > 'Restore fullscreen', when toggle with the middle mouse button.
+* Changed color of timeline selection markers for video controls dark theme.
+* Improved 'Preview Filter' speed a bit.
+* Fixed drawing snapshot if 'Split View alternate' enabled.
+* Fixed: rare occurrence when clip frame count is 0 no error handling was done.
+* Bugfix: 'Fast Clip' ignored 'Toggle Tags' (Filters could not be switched off with 'Toggle Tags').
+* Bugfix: Copy new tab
+* Some other changes
+
+--------------------------
+Version 2.7.4.2,  2.7.4.3, 2.7.4.4 [2023-04-10] GPo
+--------------------------
+Only Pre-Release
+
+--------------------------
+Version 2.7.4.1 [2023-03-25] GPo
+--------------------------
+* Added: Options > Font and Colors > 'Video controls', color of video controls can be changed here (Dark theme).
+- in fullscreen mode the dark theme is always used. 
+- please change only limited (a bit lighter or darker or change color slightly), some other values calculated from it.
+* Fullsize mode: Upper bar (splitter) is now a bit smaller.
+
+--------------------------
+Version 2.7.4.0 [2023-03-19] GPo
+--------------------------
+* Fullscreen mode reworked. 
+* Fullsize\Fullscreen mode now only possible when accessing avisynth in threads enabled. (Options > Access avisynth in threads)
+* Added: When fullsize or fullscreen an information dialog appears when a frame is loaded and the loading takes longer than 4 seconds. 
+- under Program Options > Misc2 > 'Fullscreen\Fullsize progress dialog' you can set the position for this.
+* Fix: Resample zoom flickering when zooming with the mouse wheel.
+* Some other changes
+
+--------------------------
+Version 2.7.3.8 - 2.7.3.9 [2023-03-11] GPo
+--------------------------
+* Fix: Fullscreen mode did not work with larger video dimensions.
+- some code additions and changes for the Fullscreen mode.
+* Big Note: 
+- If Avisynth is trimmed too much with SetMemoryMax, all AvsPmod filters will take longer. 
+- The Resample filter normally takes less than 1 second, but if the Avisynth memory is reduced too much, it can take 10 seconds.
+* When exiting the Fullscreen mode, the slider window is restored if it was visible before. 
+* If AvsPmod is terminated, it now looks nicer.
+* 2.7.3.9 Fix: The fullscreen window sometimes appeared in normal size when fullscreen was not active.
+
+--------------------------
+Version 2.7.3.7 [2023-03-05] GPo
+--------------------------
+* Added Fullscreen mode, old Fullscreen mode now called Fullsize (you must set new shortcut)
+- press Shift on double clicking the video or use menu Video > Additional > 'Fullscreen'
+- remainder: Press Ctrl on double clicking the video for Fullsize mode
+* Added Program Options > Misc2 > 'Fullscreen zoom' default normal fill, read the readme_FullscreenZoom.txt in the Archive.
+- for Resample: the Resample zoom must be enabled, Program Options > Misc2 > 'Show Resample zoom menu'
+* Video controls can be shown in Fullscreen mode.
+- move the mouse at the very bottom of the screen edge (10 pixels x DPI scalling). 
+- they are hidden again when you left-click in the video window.
+* Added Program options > Misc2 > 'Display filter enabled on startup'
+* Numbers Wheel faster option is now disabled at start (otherwise the last decimal digit could not be changed).
+- toggle between fast and normal: if active then a middle mouse click. The status bar shows the status.
+* When the video is drawn with Resize Filter a small green triangle is visible in the upper left corner.
+* Fixed: At the top left of the video window sometimes appeared a small square (10x10 pixel).
+
+--------------------------
+Version 2.7.3.4 - 2.7.3.5 - 2.7.3.6 [2023-02-13] GPo
+--------------------------
+* Added: Options > 'Use Ultra Fast Clip' you must read the Fast Clip readme (Help > Fast Clip readme). 
+- here is an example video: https://vimeo.com/user183482922
+* Added Video > Tools > 'Locate frame' finds a frame in another clip. Read the Locate frame readme. https://vimeo.com/797835669
+* Added alternative Split View functionality (Video > Split View alternate)
+- grab the splitter or press CTRL when clicking in the video window to place the splitter at the mouse position. 
+- Note: this menu is only the options switch, to switch Split View on or off the menu 'Split View' must be used.
+- only if Split View is switched off and you hit this menu, then Split View is switched on.
+* Added Group > 'Split View freeze frame', freezes the frame of the not selected partner tab.
+- offset the SplitView: Freeze frame > navigate to frame > select a group (group is set for both tabs and freeze frame is turned off).
+* Statusbar shows information of the active Split View tab: current tab L or R, Frame offset and frozen status. 
+- e.g. (SV-L -17, frozen R) current Split View tab is the left tab, -17 frames offset to right tab and right tab is frozen.
+* Split View now asks if the tab should be copied if the next right tab (video) has different dimensions.
+* If you disable Split View on the right partner tab and enable it again, Split View uses the left tab
+- if the left tab was the last used partner (previously, the right tab was always taken as a partner).
+* Video Window Display Border spacing and Snapshot font size changed from fixed values to DPI resulting values.
+* Slider window 'Custom color theme' now default (when the options.dat is missing).
+* 'Resize video window' now default (when the options.dat is missing).
+* Snapshot: automatically take snapshot 2 on clip refresh now default true (when the options.dat is missing).
+* Tab context menu > 'Open directory' the explorer does now select the file.
+* Get frame properties a bit faster.
+* Fixed Split View: if resize filter turned off with normal zoom (menu or shortcut). Error 'Both videos same size.. blah)  
+* Rize filter small ratio bug fixed (2 pixels)
+* Some other smal changes
+* Version 2.7.3.5: Bugfix: There was an error when 'Fast Clip' is enabled but Avisynth loading in threads is disabled.
+* Version 2.7.3.6: Bugfix: Same reason as in 2.7.3.5 but a different trigger. Sorry.
+-
+Reminder 'Resize filter' and normal zoom:
+The resize filter is switched on under Program Options > Misc 2 > 'Show resample zoom menu'.
+-
+Zoom and resize filter change with the mouse wheel:
+zoom = Ctrl down or press left mouse button
+resize filter = Shift down (mouse button does not have to be pressed)
+-
+Zoom and resize filter change 1x or 2x zoom:
+zoom = press left mouse button and click right mouse button
+resize filter = same but Shift must be pressed
+-
+Resize filter Fill or Fit:
+double click on the top or bottom right of the video window (50x50 pixel x DPI).
+at the top only the current tab and bottom all tabs.
+-
+I recommend not to use the antialiasing in the normal zoom and to use the resample filter instead.
+
+--------------------------
+Version 2.7.3.3 [2023-01-19] GPo
+--------------------------
+* Not published
+
+--------------------------
+Version 2.7.3.2 [2022-12-28] GPo
+--------------------------
+* Added: custom color for the preview filter in the slider window ( Options > Font and colors > Advanced 2 ) default on.
+* Fixed: Bookmarks count was sometimes not correctly stored in the session file (Session info tool gave wrong information).
+* Update 'encoder_gui.py', added a option to set the Cmd Codepage for the batch encoding file e.g. enter 1252 for Latin 1 (deutsche Umlaute).
+- If only partially updated: in the AvsPmod\tools directory, encoder_gui.py must be replaced.
+* Encoder gui: Doom9 user 'real.finder' added 10bit presets for x264 and ffmpeg.x264 
+* Updated 'Session info tool' a bit.
+* Bugfix: Separate DPI settings for the status bar did not work.
+* Some smal changes
+
+--------------------------
+Version 2.7.3.1 [2022-10-08] GPo
+--------------------------
+* Added Help > 'Video tutorials & more' on Google Drive.
+* Added to Snapshot menu 'Restore to current'
+* Update macro 'PreviewEncode.py', an extended version is available under 'Help > 'Video tutorials & more'
+* Bugfix: If the script contained 'toggle tags' and the option 'Save toggle tags' was not enabled, this caused an error when saving the script. 
+
+--------------------------
+Version 2.7.3.0 [2022-08-28] GPo
+--------------------------
+* Display filter can now be changed even if the 'Preview Filter' is enabled.
+* Fixed 'Number Wheel' True/False was broken.
+* Update 'Session info tool'
+* Some other changes
+
+--------------------------
+Version 2.7.2.9 [2022-08-21] GPo
+--------------------------
+* Fixed: flickering of the slider window when option 2 or 3 of the thread progress dialog is set.
+
+--------------------------
+Version 2.7.2.8 [2022-08-21] GPo
+--------------------------
+* Thread progress dialog option 2 and 3 revised (hopefully now error free).
+* Some other changes
+
+--------------------------
+Version 2.7.2.7 [2022-08-13] GPo
+--------------------------
+* Fixed: with timeline range set and middle mouse button clicked in the status bar, the current frame number was not updated.
+* Fixed problems when opening more than one file with the Open File dialog or Drag & Drop.
+* Update tool 'Session Info'
+
+--------------------------
+Version 2.7.2.6 [2022-08-10] GPo
+--------------------------
+* New tool in the 'Tool' menu, Session Info (session_info.pyo), check it.
+- if you are updating only the AvsPmod directory, you need to copy from the archive tools\'session_info.pyo' and 'ToolsMenu.py' to 
+- the AvsPmod tools folder and delete the file AvsPmod > tools > ToolsMenu.pyo
+- tool info: all changes made have no effect on the original files, only when the session is saved, the changes are written to the file to be saved.
+* Fixed: On closing all tabs or reloading the startup session an error can be displayed.
+* Fixed: flickering when the frame was displayed and the thread progress option is 2 or 3 and the frame loading took longer.
+* Changed mouse movement in the status bar if left mouse button down and timeline range is set: 
+- CTRL = unlimited scrolling; SHIFT = unlimited scrolling and sensitivity 25%, i.e. 4 times scrolling rate.
+- Summing:
+- Statusbar double-click: Timeline goes to the start or end in the limited range (depending on mouse position).
+- CTRL + Statusbar double-click: Timeline goes to the start or end in the unlimited range (depending on mouse position).
+- SHIFT + Statusbar double-click: Timeline goes to the start or end in the unlimited range*4 (depending on mouse position).
+- Statusbar middle mouse button up = timeline goes to current frame position if slider was not clicked before (the video frame was not shown).
+- When you hit Enter: If the slider frame number is outside the limited range, the video frame of the current slider frame number is displayed.
+* Added the avisynth keywords 'if' and 'else' to filterdb.data for correct syntax highlighting.
+* Fixed: Snapshot label was not drawn when zooming without antialiasing.
+
+--------------------------
+Version 2.7.2.5 [2022-08-01] GPo
+--------------------------
+* OptionsDialog saves/restores the last page index.
+* Slider window radio buttons look better again when no system zoom is used.
+* Bugfix: If thread progress dialog option 2 or 3 was selected the mouse pointer was not reset when clicking into the video window. 
+* Some other changes
+
+--------------------------
+Version 2.7.2.4 [2022-07-31] GPo
+--------------------------
+* New option for the thread progress dialog. Program Options > Misc 2 > 'Thread progress dialog behave'.
+- option 1 is chosen as default so that there are no surprises for users who do not read the changelog. So choose your option yourself.
+- 3 options available (default 1, option 1 is also used if the preview window not visible): 
+-- Show progress (that's the old), program can be minimized with the windows system button 'Minimize', but the program can get the "no response" status.
+-- Show progress (Shift hide/show the program), windows system buttons are disabled, the program cannot get a "no response" status. 
+-- Hide progress (Ctrl to show progress, Shift hide/show the program), windows system buttons disabled, the program cannot get a "no response" status.
+-- Note* if option 2 or 3 selected:
+--- if you want to minimize AvsPmod during a longer clip loading process, press Shift for 0.5 to 2 seconds do minimize or show AvsPmod. 
+--- if you hide it with Shift, the progress dialog is shown. If you minimize the program and shows it again during the loading process, 
+--- the slider window is not redrawn and is invisible (I don't know if I can fix this).
+- 
+* Added the option "I" frame to the context menu of the forward/backward jump buttons. 
+* DPI scaling options revised, removed not useful options and added 'slider window' and created an extra dialog.
+* When saving the script, a dialog is displayed if "user sliders" are found but the option to save/read the "marked" script is not enabled.
+* Fixed: If the 'Resample Filter' was used during video playback and was changed, the playback speed then slowed down.
+* Fixed: Slider window 'radio buttons' looks now nicer if OS DPI scaling used.
+* Fixed: No new sliders were created when the clip refresh was triggered by clicking in the video window.
+* Note: The 'Preview Filter' will only update if it is turned on, otherwise the shortcut for turning it off or on or 
+- the 'Preview Filter' checkbox must be used.
+* In the Options Dialog some options moved to another tab e.g. 'Min. Text lines when video preview visible' to tab 'Text'
+* Some other changes
+
+--------------------------
+Version 2.7.2.3 [2022-07-24] GPo
+--------------------------
+* Bugfix: If the 'Resample filter' was used and a 'Preview filter' was set there was an error message.
+
+--------------------------
+Version 2.7.2.2 [2022-07-22] GPo
+--------------------------
+* Thread progress dialog can now be hidden. Program Options > Misc 2 > 'Hide thread progress dialog (Press Ctrl to show)'
+- hides only the progress dialog if the video window visible on creating or refreshing a clip.
+- if you press Ctrl for 0.5 to 2 seconds (depends on the thread state), the dialog is shown.
+* Fixed "Preview Filter" showed error message if no filter was present in preview filter area (e.g. all filters disabled with toggle tags)
+* Option > 'Draw the frame during clip refresh (Beta)' removed, function has been revised and is now always active. Please report problems!
+- see 2.7.2.1 > When 'Accessing Avisynth in Threads' is used...
+* Some other changes
+
+--------------------------
+Version 2.7.2.1 [2022-07-15] GPo, (a lot of news and improvements)
+--------------------------
+* Added slider window checkbox 'Preview filter', enables/disables the last used 'Preview filter' or P-Filter 1 if no last used index found.
+* 'Preview filter' is now restored if a filter outside the 'Preview filter' area changed.
+* 'Preview filter' is also restored when enabling/disabling the 'Split Clip'.
+* 'Preview filter' for the 'Split Clip' is also possible.
+-
+* 'Split Clip' is fully integrated (pixel values, video information, etc.). Help > 'Split Clip readme'
+* Added menu Video > Additional > 'Restore split clip if enabled' (default off).
+- restores the 'Split Clip' if was active before refreshing the script.
+* If you want, you can set the color of the 'Split Clip' for the timeline in the context menu of the frame numbers text field.
+-
+* Added function jump to I frame, the frame properties must of course allow this.
+- search depth max. 350 frames, Esc breaks, Statusbar gives information, use 'Split Clip' or disable all filters for faster finding.
+- use menu Video > Navigate > 'Next I frame' or 'Previous I frame' or 
+- if frame property window visible and mouse is over the properties (Win10) or focused, with mouse browse buttons you can jump:
+-- with Ctrl to next or previous I frame
+-- with Shift to next or previous selection marker
+-- with Alt to next or previous titled bookmark
+-- without key to any next or previous marker (selection, bookmark)
+-
+* 'Number wheel' can be enabled or disabled under Edit > Enable 'Number wheel'.
+* 'Number wheel', change the fast decimal part rate with middle mouse click works now only if a number selected, if no number is selected 
+- the 'Number wheel' function will be disabled. This improves the unintentional switching when the middle click should actually activate the preview.
+- I'm not entirely happy with it, either the switch normal/fast will be removed or I'll think of something better.
+-
+* Added program options > Misc 2 > 'Show memory information in thread progress dialog' (default True).
+- displays the available system memory in the thread progress dialog (5 seconds after the dialog appears).
+* Added program options > Misc 2 > 'Show shortcuts in context menus*' Shows or hides the shortcuts in the video and script context menus.
+-
+* When 'Accessing Avisynth in Threads' is used, the program no longer gets the "No response" status when a clip is reinitialized. 
+- the video image is fully preserved while waiting for the clip (Not when waiting for a frame or no image visible).
+- it's a bit beta, you can disable it under Options > 'Draw the frame during clip refresh (Beta)', please report problems!
+* Avisynth error messages on creating a clip corrected. It was always shown (Make sure avisynth is installed...).  
+* Some other changes.
+
+--------------------------
+Version 2.7.2.0 [2022-06-19] GPo, Onestone Edition Pro
+--------------------------
+* Fixed: 'Number wheel' loses the fokus of the number in a 'Preview filter' area.
+* Fixed some other small glitches. 
+* 'Number wheel' etc. Please read the changelog as of version 2.7.1.8 
+* All good things are 3, so the last special edition this year? :)
+
+--------------------------
+Version 2.7.1.9 [2022-06-17] GPo, Onestone Edition
+--------------------------
+* Editor: Change numbers with the mouse wheel revised (see Version 2.7.1.8). 
+- negative values and floating point numbers are now possible.
+- if only the decimal part of a float number is selected: the last digit's are changed: (number is 2.25) default = 2.26, Shift = 2.30, Both = 2.35
+- If you enable the function by a double-click on a number: 
+--- you can change the decimal part rate (normal/fast) by a middle mouse click (the status bar gives feedback).
+--- the fast decimal part rate is: default = .1, Ctrl = .2, Shift = .5  also (2.35, 2.45, 2.75)
+--- you can also change the numbers using the 'left' and 'right' keyboard keys
+* Program options > Misc 2 > 'Mouse wheel scroll rate in editor (0 disabled)' if you have it enabled you can double the rate by pressing Ctrl
+* Function Split Clip revised: 
+- if no further filter was used after /**avsp_split**/ at least 'last' had to be written into the script otherwise no split clip was created.
+- this is now done automatically if no other filter is found.
+
+--------------------------
+Version 2.7.1.8 [2022-06-12] GPo, Milestone Edition
+--------------------------
+* New function Video > 'Split Clip on/off' (please read Help -> 'SplitClip readme')
+- the 'Split Clip' splits the main clip into 2 clips, and allows you to switch between 
+- a fast preview (without filters) and a normal preview (create a shortcut key for quick switching). 
+-
+* Editor new: Changing numbers or true/false with the mouse wheel (Help -> 'Number wheel readme').
+- select an area containing numbers, press Ctrl or Shift or both and use the mouse wheel. Ctrl = 1, Shift = 5, Both = 10
+- the first number group found is changed (maximum search depth for the first digit are 20 characters).
+- Recommended*: select the numbers or true/false with a double-click, no pressing of Ctrl or Shift is required. Numbers are then changed by 1
+- if the selection is made by double-click: The function must be deactivated by a single click.
+- true/false can now be changed either with (left down and right click) or (with the mouse wheel).
+-
+* New entry in tabs context menu 'Sort by name' sorts the tabs in alphabetical order.
+* Program options > Misc 2 > 'Mouse wheel scroll rate in editor (0 disabled)' can now be changed without restarting the program.
+* 'Reload all tabs' now first asks if the operation should be executed and the number of reloaded tabs is displayed in the status bar.
+* Rare bug fixed: when many sliders are created, the preview may be broken (python memory problem).
+* Fixed: When multi-line tab style and the number of tab lines was greater than 1, a drag & drop operation could be performed when switching a tab.
+
+--------------------------
+Version 2.7.1.7 [2022-05-29] GPo
+--------------------------
+** If you use DPI zoom in windows read the changelog of version 2.7.1.6 **
+* Fixed flickering when zooming with the mouse wheel.
+
+--------------------------
+Version 2.7.1.6 [2022-05-28] GPo
+--------------------------
+* DPI scaling revised:
+- the calculation basis is now the pixel size (previously point size). The font sizes now match the set system zoom. 
+- if you have adjusted the DPI scaling differently, you may have to do this again. The font size can now be larger.
+- now all extra values can be adjusted from -20% to 100% and DPI scaling manually from -20 to 200%.
+- the DPI scaling for the tabs can now be more fine adjust. 10% makes a differenze.
+- with a 27 inch QHD monitor and 100% system zoom try +10% for the tabs if your eyes are a bit older..;) 
+* For Fullsize/Fullscreen mode the visibility of the tabs can be set (Program Options > Video > 'Fullscreen/Fullsize mode').
+* Added to Crop-Editor autocrop mod 2 and mod 4 (negative calculation, (crop less)).
+* Added new menus (tab context, file menu) 'Reload all scripts'
+* Display option 'Resize video window' revised.
+* When a script has been changed and the program is closed, a dialog appears asking whether the changes should be saved. 
+- in this dialog it is now possible to accept the decision for all scripts if Ctrl is pressed (this can be read in the dialog).
+* Fixed: When closing the program all changed scripts are initialized. Sorry.
+* Some other improvements...Hopefully. xD
+
+--------------------------
+Version 2.7.1.5 [2022-05-24] GPo
+--------------------------
+* New Fullscreen mode: Press Ctrl when double clicking the video window or use menu Video > 'Fullscreen'. (double click or Esc resets). 
+- if you press Ctrl on double clicking, the preview changes beetwen program Fullscreen and preview Fullsize mode.
+- note: if Fullscreen mode changed and the preview was not visible, the zoom resample filter turns off.
+* Separate video window: Again some glitches fixed.
+* DPI scaling for tabs and video controls can now also be reduced (maximum -20%, but not less than 100%)
+* The default width of the slider window at program start (for a new tab) can be saved in the context menu of the slider window.
+* New menu: Options > 'Multiline tab style' you can change it on the fly.
+* Video > 'Resize video window' has been moved to Video > 'Additional', you must create a new shortcut for it.
+* 'Toggle preview placement' revised, splitter for preview and editor should work better now.
+* Option move or resize the program automatically has been removed without replacement. Not compatible with the Resample Filter.
+* Some other changes.
+
+--------------------------
+Version 2.7.1.4 [2022-05-22] GPo
+--------------------------
+removed, slider update bug
+
+--------------------------
+Version 2.7.1.3 [2022-05-09] GPo
+--------------------------
+* Fix for separate video window: Background was not deleted when zooming and flickering when showing. 
+
+--------------------------
+Version 2.7.1.2 [2022-05-06] GPo
+--------------------------
+* If tabs multiline style and tabs row count > 1: If you double-click on the video window, the tabs are hidden.
+- same as pressing Ctrl on double clicking the video window.
+* New macro CopyPixelinfo.py: Open the macro with a text editor for explanation and settings.
+* Fix: flickering when zooming with the keyboard and 'Resize video window' is selected.
+- note: option 'Resize video window' only works with keyboard zoom or if the video height changed.
+* Improved: separate video window and 'Resize filter' behavior. 
+* Fix: if use separate video window enabled, deleting bookmarks doesn't work properly.
+* Fix: separate video window saves now its size and position on exit.
+* Fixed some glitches with the separate video window, but I do not recommend using it. 
+* For the file extensions based templates there is a new modifier ><. readme_d2v_based_template.txt
+
+--------------------------
+Version 2.7.1.1 [2022-04-28] GPo
+--------------------------
+* When normal zoom and resample zoom are used together, the status bar shows it separately e.g. (1.25 x r0.8x) 
+* If there were tabs in a group, XY and Zoom were saved for the group,
+- this was bad when in a group there were videos with different dimensions. 
+- now the values are saved for each tab regardless of the group.
+* Fixed: If the trim or crop editor was showing and an attempt was made to switch tabs, 
+- the bookmarks were deleted from the timeline after the warning message (tab cannot be change).
+* Fixed script min text lines if tab multiline enabled and tabs row count > 1. 
+* Fixed flickering when zooming with the mouse wheel.
+* Some small other changes.
+
+--------------------------
+Version 2.7.1.0 [2022-04-02] GPo
+--------------------------
+* Update filterdb.dat, the new filterdb.dat is only usable from AvsPmod 2.7.10 (some things added)
+- update some internal avisynth filters to avs+ versions (you must override the old filterdb.dat with the new one).
+- also added as hints filters with different parameters e.g. AssumeFPS and comment hints e.g. Overlay.
+- calltip displays pixel types now in short format e.g. ColorBars.
+* Now the resize filter can also be used with the mouse wheel by pressing Shift and the left mouse button.
+- so: without shift normal zoom, with shift resample zoom ( when activated under Program Settings -> Misc 2)
+- this also applies to the 2x zoom function (press left mouse button and click right).
+* Fixed: on start up, matrix menus doesn't display the correct defaults if only one tab loaded.
+* Fixed: flicker on first displaying the video windwow or different video dimensions.
+
+--------------------------
+Version 2.7.0.9 [2022-02-25] GPo
+--------------------------
+* 'Run analysis pass' changed, no 'extra avisynth frames' are triggered.
+* Added 'Run FPS analysis', similar to 'Run analysis pass' but no extra clip is created and nothing is released. 
+* Fixed resize filter on copy tab
+* Fixed ? CLI Encoder, win OS cannot find encode.bat (x264 doesn't start)
+- if you only update the AvsPmod files you have to delete the file 'encoder_gui.pyo' under AvsPmod\tools 
+- and replace 'encoder_gui.py' with the new one.
+* New macro 'Run analysis pass', explanations are in the macro.
+
+--------------------------
+Version 2.7.0.8 [2022-??-??] GPo
+--------------------------
+* Frame properties can now be displayed in the slider window. Program options > Misc 2 > 'Show frame properties*'
+- the height can be changed in the context menu of the property text field.
+- double click in the property text field to increase the height by 50%
+- Note: If the property window is visible, the properties are read for each frame (Even with closed slider window). 
+- If you want to save some CPU time you should close the property window when the properties are not needed.
+- During playback no properties are read. 
+* On Display or Resize filter error, avisynths error message is now shown is it available.
+* Some minor fixes
+* I mention the "preview filters" that have become an essential part of AvsPmod. 
+- (Near real time display of filter changes). Help > 'Preview Filter readme'
+-  
+** Avisynth 3.71 final version has problems with prefetch and frame properties. **
+AvsPmod also reads the frame properties when creating a clip, so avisynth hangs. 
+There are two ways to avoid this:
+Video > Display > YUV -> RGB > 'Read from source or script' must be disabled.
+or
+Use Avisynth version 3.72 test 3, the problem was fixed here.
+This version is available on Doom9: https://forum.doom9.org/showthread.php?t=181351
+
+--------------------------
+Version 2.7.0.7 [2022-01-29] GPo
+--------------------------
+* Keyboard zoom +- synchronized with mouse zoom (no more big jumps)
+* Fixed YUVA, displayed alpha pixel values where not correct (again thanks to StvG)  
+-
+*** Avisynth 3.71 final version has problems with prefetch and frame properties. ***
+AvsPmod also reads the frame properties when creating a clip, so avisynth hangs. 
+There are two ways to avoid this:
+Video > Display > YUV -> RGB > 'Read from source or script' must be disabled.
+or
+Use Avisynth version 3.72 test 1, the problem was fixed here.
+This version is available on Doom9: https://forum.doom9.org/showthread.php?t=181351
+
+--------------------------
+Version 2.7.0.6 [2022-01-23] GPo
+--------------------------
+* Pixel values of all color formats can now be displayed. (a big 'thank you' to StvG for the active help) 
+* Changed the display of the calculated pixel values in the status bar.
+- the not readable values now only calculated from 8bit. If the source is 8bit, 
+- an asterisk is displayed in front of the value as usual, otherwise 8bit_ is put in front. 
+- if you want to show the alpha channel you must set %CLR for the status bar value modifiers. 
+* fixed some errors on closing tabs
+-
+*** Avisynth 3.71 final version has problems with prefetch and frame properties. ***
+AvsPmod also reads the frame properties when creating a clip, so avisynth hangs. 
+There are two ways to avoid this:
+Video > Display > YUV -> RGB > 'Read from source or script' must be disabled.
+or
+Use Avisynth version 3.72 test 1, the problem was fixed here.
+This version is available on Doom9: https://forum.doom9.org/showthread.php?t=181351
+
+--------------------------
+Version 2.7.0.4 [2022-01-17] GPo
+--------------------------
+*** The main reason for this release is information *** 
+Avisynth 3.71 final version has problems with prefetch and frame properties.
+AvsPmod also reads the frame properties when creating a clip, so avisynth hangs. 
+There are two ways to avoid this:
+Video > Display > YUV -> RGB > 'Read matrix from source or script' must be disabled.
+or
+Use Avisynth version 3.72 test 1, the problem was fixed here.
+This version is available on Doom9: https://forum.doom9.org/showthread.php?t=181351
+***
+* Error message handling improved  
+
+--------------------------
+Version 2.7.0.3 [2022-01-15] GPo
+--------------------------
+* Add program options > Misc2 'Show video control button tooptips', show/hide tooltips.
+* Add Video > Additional > 'Use previous frame time'
+- when refreshing with F5 or Video window focus or mouse middle button: 
+- if frame count <> previous frame count and frame rate <> previous frame rate 
+- then the new frame number is generated from the previous frame time. 
+* Improved error messages: On create display clip more information in case of errors, 
+- and an attempt is made to use an alternative RGB32 conversion, this is then displayed as an error in a dialog. 
+- but note: Something is wrong and the displayed result may be wrong.  
+* Fixed: display filter text was converted to lower case. So eg. propSet("_Matrix") don't work.
+* Some glitches with the 'Resize filter' fixed.
+* Fixed: the preview was not updated if text was changed in the script and the script did not have the focus.
+* New Russian translation file from Doom9 user Arx1meD.
+
+--------------------------
+Version 2.7.0.2 [2021-12-25] GPo, It's New Year's Eve soon
+--------------------------
+* Added Video > 'Resize video window'
+- if switched on (default off), the video window is adapted to the size of the video when the tab or
+- the zoom factor is changed (exception zooming with the mouse).
+- if the resize filter is used, I recommend deactivating this option when there are small and large videos in the tabs. 
+* Bugfix zoom menu, the values are not displayed visually in the menu.
+* Bugfix for double clicking on the script / video window splitter
+* Bugfix for menu 'Video information' while resize filter is activated
+* Bugfix for avisynth versions smaller then 3.71  
+- AvsPmod crashes while trying reading the matrix from the properties (the bug was created in 2.6.9.9)
+* Some minor changes
+
+--------------------------
+Version 2.7.0.1 [2021-12-19] GPo, It's Christmas soon
+--------------------------
+* Added a preview resize filter, please read the readme_resampleFilter.txt (Help > 'Resample filter readme')
+- in order not to overwhelm beginners or people who rarely use AvsPmod, the resample menu is switched off by default.
+- the menu (off, as submenu, normal) can be changed under the program options > Misc2 'Show resample zoom menu'
+* Added Video > 'Save pos & zoom on tab change' 
+- if it is activated, the position as well as the zoom settings (zoom, fit, fill) are saved
+- and restored (if possible) when changing tabs. It is a supplement to 'Save view pos on tab change' 
+- which only saves the position.
+* The _last_session.ses is saved at program start as '_last_session_backup.ses'
+- the next time the program is started, it will be saved with a date name in the 'ProgramDir\SessionBackups' directory.
+- the number of backups can be set under program options > Save/Load (default 3) 
+- Warning! Do not save any sessions yourself in the 'SessionBackups' directory with name begin _session_backup_ 
+- these files can be deleted.
+* Added menu File > 'Reload startup session'
+- saves the current tabs as session in the 'SessionBackups' folder, closes all tabs 
+- and opens the _last_session_backup (the backup of the _last_session on startup).   
+* The video window is no longer automatically resized as often.
+* The video slider button changes the color when a video frame is requested or again readed or the button pressed. 
+* 32bit Version: fix for classic avisynth 32bit versions.
+* Some other small fixes.
+* Hint: So that the session is saved at the end of the program, 
+- 'Save session for next launch' must be activated under the program options 'Save \ Load'. 
+
+--------------------------
+Version 2.7.0.0 [2021-11-13] GPo
+--------------------------
+* Added Program options > Misc > 'Show warning for plugin functions parse errors'
+- if it is deactivated, no error message appears with incompatible (wrong) plugin function names. 
+- the plugin (the function) does not get any support for extended AvsPmod functions.
+* User wishes: editor popup menu entry 'Delete'
+* Bugfix: display of pixel values higher than 8bit (thanks again to pinterf)
+* A nice version number that should stick for a while... I hope.
+
+--------------------------
+Version 2.6.9.9 [2021-11-07] GPo
+--------------------------
+* Pixel values higher than 8bit can now be displayed (thanks to pinterf (pfmode) for the code)
+- Hex values are now also calculated from the returned avisynth YUV / RGB values
+- if the value is read from the display, it is preceded by an asterisk  
+* Fixed slider windows show/hide exclusions filter list
+
+--------------------------
+Version 2.6.9.8 [2021-10-25] GPo
+--------------------------
+* Added reading frame properties (At least AviSynth+ 3.71 is required for full support).
+- deactivated during playback
+- if the property window is closed, reading is also deactivated
+* Added Options > Font & colors > Advanced 2 'Properties window' set text style for the property window
+* Added Display > YUV -> RGB > 'Reset matrix if not found' 
+- normally the matrix is retained if it could be read once, if this option is selected it is reset to the
+- default value if it cannot be read. 
+* Fixed: Loading older font & colors backup files
+* Bugfix Statusbar ads are not updated immediately
+
+--------------------------
+Version 2.6.9.7xx only test versions
+--------------------------
+
+--------------------------
+Version 2.6.9.6 [2021-09-29] GPo
+--------------------------
+* Change menu naming File > 'Toggle last two tabs' to 'Previously selected tab', you must recreate the shortcut for it.
+* Fixed zooming with keyboard and program startup with last zoom settings doesn't work. 
+- Note: 100%, fill and fit is always restored at program startup.
+- only if you want to restore 2x or something similar you must turn on Options > Video > 'Startup with last zoom settings'  
+* Fixed 'Auto take snapshot 2' doesn't work on frame number 0
+
+--------------------------
+Version 2.6.9.5 [2021-09-25] GPo
+--------------------------
+* Added to slider window snapshot popup menu 'Copy snapshot 2 to 1'
+* Zoom values in the status bar that are not equal to 1 are now always displayed in decimal
+* Added File > 'Toggle last two tabs', toggles between the last two selected tabs (idea by Dogway)
+* Fixed 'Auto take snapshot 2', if several tabs were open, the wrong frame number could be used as a snapshot 
+
+--------------------------
+Version 2.6.9.4 [2021-09-18] GPo
+--------------------------
+* Added selectable delay for thread progress dialog ( program options Misc 2 )
+* Added automatically take snapshot on clip refresh ( Video > Snapshot > 'Auto take snapshot 2' )
+- better than staring at the screen for 30 seconds...and then still miss the moment
+- also added on slider window Snapshot popup menu 'Auto take snapshot 2'
+- preview filters do not trigger a snapshot only when the clip is initialized (refreshed)
+- if active, then 'Make 2' is changed to '*Make 2' in the slider window 
+* Error treatment for the 'Use advanced frame thread' revised
+
+--------------------------
+Version 2.6.9.3 [2021-09-10] GPo
+--------------------------
+* 'Apply filter' revised. Preview filter is now also possible as a default in the templates. 
+- /**avsp_filter must be at the beginning of the template.
+- the templates for this have been updated. 
+
+--------------------------
+Version 2.6.9.2 [2021-09-10] GPo
+--------------------------
+* Added to the timeline selections context menu 'Apply filter' and to the Options menu 'Apply filters...'
+- insert one or more filters in a part of the clip (selected with the Trim Editor), or for other things, think of something.
+- templates can be created for this (Options > 'Apply filters...'), which are then inserted into the script   
+- please read the applyfilters_readme.txt ( Help > 'Apply filters readme' )
+* Added Options > 'Display filters...', you can create templates for the display filter
+- the templates can be selected from the menu Video > Display > 'Select display filter...'
+- if you choose a template, the current display filter will be overwritten!
+- renamed 'Configure display filter' to 'Edit current display filter...' (This does not change the template)
+* Changed all default options for 'Accessing Avisynth in threads' to True (enabled)
+- only noticeable if no options.dat is available 
+
+--------------------------
+Version 2.6.9.1 [2021-08-28] GPo
+--------------------------
+* Added menus Video > Display > 'Display filter' and 'Configure display filter'
+- you can add avisynth code (filters) and it is used as last filter for all scripts.
+- this filter affects only the display drawing! 
+- on changing the display filter the current script does remain the preview filter state if video window visible, 
+- all other scripts does turn off the preview filter.
+- you can use short macro code by adding #> at line begin, e.g. #>avsp.GetWindow().OnMenuVideoZoom(zoomfactor=1) 
+- Note: The filter requires the same CPU time as if it were written in the script.  
+- link a shortcut for quick switching, the filter is at program startup always off.
+* Added menu Edit > Miscelaneos > 'Set selection as display filter...' see above.
+* Under Program Options > Misc2 the default display conversion YUV -> RGB can be set, which is used for a new tab (script)
+* Added menu File > 'New tab from template'
+- you can create a template for a new tab by adding an entry with an asterisk * in the file extension templates. 
+* Bugfix writing the matrix into the script led to an error if the matrix was already written into the script.   
+* Some other changes
+
+--------------------------
+Version 2.6.9.0 [2021-08-15] GPo
+--------------------------
+* Play thread modified, ~14% faster ( without filter ).
+- hopefully bug under Win7 fixed 
+* Bugfix middle mouse button on a selections mark in the timeline ( trying to delete the mark causes an error )
+* Bugfix 'Save Image Sequence', fixed AvsPmod and macro code
+* Added to filterdb.dat Dogway's ex_contrast
+
+--------------------------
+Version 2.6.8.9 [2021-08-07] GPo
+--------------------------
+* Improved get_frame threading ( lower CPU usage on Win10 )
+* Play thread now multi threaded. 
+- the speed up varies on the video dimensions and used filters and
+- goes down to 0 with heavy filters or big video dimensions (no hardware acceleration).
+- on my sytem: video 1280x720 without a filter and 100% zoom, before 120 fps now 178 fps
+* Slider window refresh on Win10 improved.
+* Slider window snapshot button (label) gets feedback on making a snapshot.
+* Slider window scroll rate increased to 40 pixel 
+* Added to filterdb.dat 'KNLMeansCL' 
+* Some other changes
+
+--------------------------
+Version 2.6.8.8 [2021-08-02] GPo
+--------------------------
+* Completely new threaded playback routine.
+- especially under Win10 this should result in lower CPU usage, higher speed and a smoother playback. 
+* Add custom editor mouse wheel handler ( Program options > Misc2 > 'Mouse wheel scroll rate on editor' )
+- One user reports problems with the mouse wheel while the PC is running for a long time (40 days). Maybe it helps.
+- Or you want change the scroll rate: 1 to 5 lines ( default 0 = custom handler disabled )
+* Add to video slider context menu 'Timeline to trims' and 'Timeline to clips'
+- inserts the complete timeline into the script as trims, separated by the selections. 
+
+--------------------------
+Version 2.6.8.7 [2021-07-15] GPo
+--------------------------
+* Add to menu File > 'Clear file history'
+* Bugfix advanced frame thread ( Options > 'Use advanced frame thread' )
+* Bugfix 'Write selected preview filter to script', at the end a * was missing ( **/ )
+* Bugfix filterdb.dat, entry for 'MCTemporalDenoise' was buggy
+
+--------------------------
+Version 2.6.8.6 [2021-07-04] GPo
+--------------------------
+* Fixed again some shortcut problems
+* Minor other changes
+
+--------------------------
+Version 2.6.8.5 [2021-06-27] GPo
+--------------------------
+* New Frame thread routine Options > 'Use advanced frame thread'
+- it is Beta! a bit faster, one single frame thread per script, test it out and report problems.
+* Timeline shows frame or time numbers if a timeline range is set
+- program options > Misc 2 > 'Timeline range numbers count', you can change the count of numbers (1, 4, 9)
+* The sensitivity of the mouse movement on the status bar for moving the timeline range is adjustable
+-  program options > Misc 2 > 'Timeline move on status bar sensitivity', lower values more movement
+* A double click on the status bar moves the timeline in the limited area forwards or backwards, depending on the position of the mouse pointer
+- if Shift is held, the entire area is moved without limit 
+* A middle click on the status bar moves the timline back to the current frame
+* Fxed: if not timeline 'Auto reset' was set, on tab change the wrong frame was shown
+* Fix: I hope some shortcut problems fixed
+* New russian translation, thanks to Doom9 user Arx1meD
+
+--------------------------
+Version 2.6.8.4 [2021-06-17] GPo
+--------------------------
+* SplitView now also recognizes group offsets ( nice for compare two same videos with different start offsets )
+* Timeline range can be moved with 'hard coded shortcuts'
+- Ctrl + Alt + Left or Right ( moves 10% steps in the limited range )
+- Ctrl + Alt + Up or Down ( moves the complette range ), then slider position does not match the picture.
+- the now displayed frame number can be updated with the 'Enter' or 'Return' or a frame step, if you have not updated and 
+- you hold down Ctrl while hitting 'Enter' or 'Return' the timeline moves back to the current frame number
+- there is one setting under program options > Video > 'Move video slider to timeline start', read the tooltip 
+* Update macro PreviewEncode.py
+* Fixed: if a resize filter was set with a 'Preview Filter' during playback, an error message could appear.  
+* Fixed: the context menu of the text editor could crash under certain conditions 
+-
+How do I sync videos with groups:
+If a group was previously selected, delete that group first. Make sure 'Add tab to group' > 'Apply offsets' is checked
+Go to the desired position with each video (tab), then select the same group for each video ('Add tab to group'). 
+Now all videos should be frame accurately synchronized. 
+
+--------------------------
+Version 2.6.8.3 [2021-06-11] GPo
+--------------------------
+* Added the ability to move the timeline range
+- move left or right on the status bar with the left mouse button pressed 
+- the shift value is calculated depending on the size of the area, if you press the control key the value is 1 
+- the range of movement is limited to the slider position, if the shift key is pressed, the range is not limited,
+- but then the displayed image no longer matches the displayed slider position, you then have to click on the slider again.
+* The video slider has been given a context menu
+- if you click with the right mouse button directly on a selection (blue area), the full menu is displayed else only the 'Trim editor' menu
+* Status bar info %TM removed, a similar information is now displayed on the video slider
+* Added macro PreviewResize.py 
+- is intended for playback with display zoom < 100%,  more information is written in the macro.
+* Update PreviewEncode.py macro (showDialog, save and read the options, and more)
+* New macro 'DeleteEndodings.py' in macro subfolder 'Extra'. Is intended as a supplement to 'PreviewEncode' 
+* Small bugfixes in timeline range   
+
+--------------------------
+Version 2.6.8.2 [2021-06-02] GPo
+--------------------------
+* Add menu Video > 'Timeline range'
+- you can set the range for the video slider from 50 to 2000 frames in steps, or a custom range or start and end separated by a comma.
+- is not start and end is specified the current position is the calculations center for the range (set range 200 at pos 500 results in frame range 400 to 600 )  
+- if a range set, the playback ignores the selections and plays the timeline range in a loop if 'Play loop' activated and not 'Auto scroll' is set
+- the background color of the slider and selections is changed when a range is set 
+* The status bar has got a context menu 'Timeline ranges', the custom timeline settings can only be accessed from here. 
+- if 'Auto scroll' set, the timeline range scrolls automatically if a frame outside the current range selected (key, mouse wheel, bookmark jump, etc.) 
+- if 'Auto reset' set, the range resets if the video frame count change or you set the range and the script was not initialized.
+- If the slider is in the area of a selection and 'Custom range' is selected, the slider area is entered as a default in the dialog box.
+* New  status bar info %TR and %TM stands for Timeline range. (program settings > Video > 'Configure video statusbar')
+- %TR or %TM shows nothing if 100% Range is set, at Range 200:  %TR shows [200] and %TM [start-end], use one of them.. should be enough.
+- a good place should be after the frame count value  'Frame %F / %FC %TR -  (%T)' 
+* Added selections and bookmark information to the Video information ( Video > Video information )
+* On Win10, the mouse wheel should now also work in the status bar.
+* Added macro 'PreviewEncode.py' ( update 2021.06.01 ) to the macro folder
+- encodes fhe selections and insert the clips and trims into the script ( for a fast preview )
+- please open the macro with an text editor and read the info and change the paths and templates according to your needs.
+
+--------------------------
+Version 2.6.8.1 [2021-05-24] GPo
+--------------------------
+* Without words ;) 
+
+--------------------------
+Version 2.6.8.0 [2021-05-24] GPo
+--------------------------
+* Bugfix and update: display YUV > RGB conversion showed wrong values. 
+- the matrix actually read is displayed in brackets behind the matrix currently in use. 
+
+--------------------------
+Version 2.6.7.9 [2021-05-23] GPo
+--------------------------
+* Split View can now show the Snapshots
+* Split View remembers the last X, Y coordinates and the zoom factor when you turn off Split View.
+- in short, you can go from split view to normal view and compare the image using the tab selection, 
+- if you don't change the frame number you can switch back to the previous Split View. 
+* Auto Preview now only closes the video window. So you can look at the scripts via tab even if auto preview is switched on.
+- the uninitialized tabs are still skipped if the tabs are changed with the mouse forwards/backwards buttons or the mouse wheel. 
+* Bugfix (I hope): 'Add toggle tag' from the slider window context menu. Toggle tag was sometimes incorrectly placed in the script.
+
+--------------------------
+Version 2.6.7.8 [2021-05-16] GPo
+--------------------------
+* With large video dimensions, the display drawing is much faster.
+* Split View drawing routine improved and zoom option 'fit inside' fixed
+* Bugfix: AvsPmod can crash if a resize filter is used in the preview filters. 
+- the reason is the pixel information that does not match the x, y coordinates of the mouse pointer. 
+- if a resize filter is now used in the preview filter, the pixel information is only read from the display. 
+* New frame thread routine disabled, get thread errors.
+* some other small changes
+
+--------------------------
+Version 2.6.7.7 [2021-05-14] GPo
+--------------------------
+* New option Options > 'On cancel assign the clip later' ( Refer to 'Accessing Avisynth in threads' )
+- AvsPmod should normally be closed after a thread has been canceled by the user. 
+- this option tries to assign the clip to the script after the user has canceled the thread and the thread has been terminated internally.
+- nice for indexing, you can play with AvsPmod with another tab and a message appears if the clip process finished.
+- but test it, it's a bit alpha or beta or whatever. It's going smoothly for me, but you never know what the user is doing. ;)
+* New frame thread routine Options > 'Use new frame thread routine. Beta!'
+- Please test and report the differences, on my system under Win7 the new routine only brings 2.5 fps more playback speed.  
+- I had expected more of it for the long hours of work. I'm sad ;) But maybe it works better on another system.
+- The old routine works fine for me, I've never had a thread error. If no one gives me positive feedback about the new routine, it will be removed. 
+- To compare, please do not use any filters in the script and set playback speed to maximum and zoom to 100%
+- The fps is displayed on the left in the status bar. The videos shouldn't be bigger than HD otherwise the difference in the routines will be minimized.
+
+/*
+About accessing Avisnth in threads:
+Even with thrads it is easy to crash AvsPmod, the avisynth.dll is coupled with the main thread, 
+if an error is triggered by a plugin and the plugin or avisynth crashes, AvsPmod is also torn into the abyss.
+The threads only helps if avisynth does not return.
+Use program options > Save/Load > 'Backup session when previewing' and the accesses in threads to minimize the risk of losing the script.
+*/
+
+--------------------------
+Version 2.6.7.6 [2021-05-09] GPo
+--------------------------
+* Values of the sliders can only be changed with the mouse wheel if the left mouse button is held down
+-  (prevents changing without performing a refresh, Win10) 
+* The drawing of the video frame slightly changed (if row size != pitch) faster now.
+- especially affects the preview filter if there is a resize filter in the preview filter (or crop is used) 
+* Extra background color for the sliders can optionally be switched on or off (Fonts and colors)
+** AvsPThumb does not work with this version. Update follows.
+/*
+Bookmarks navigation menu has been removed without replacement. Reason:
+I have been looking for a bug for almost 12 months that caused me a 4-5% increased CPU load when the slider window is visible.
+The bookmark menu is the culprit, there are entries there and if these entries are emptied and filled again when you change tabs,
+this leads to very strange behavior. I've looked at all the calls to this routine and can't find any errors.
+I think this is a wx bug
+*/
+
+--------------------------
+Version 2.6.7.5 [2021-05-02] GPo
+--------------------------
+* Just a bug fix version 
+* If only preview filters were in the script, the slider window button may not have been set to enabled 
+* An error could arise if only one tab was available and 'Split View' has been activated.
+
+--------------------------
+Version 2.6.7.4 [2021-05-01] GPo
+--------------------------
+* New checkbox in the slider window 'Disable refresh'
+- if checked: several filter parameters can be changed with the sliders without triggering an immediate refresh. 
+- the refresh is only carried out when the video window gets the focus or through other actions that trigger a refresh. 
+- Exceptions are the preview filters, which are treated normally.
+- But if a non-preview filter parameter is changed, the preview filter is switched off. 
+- default value can be changed under program options > User sliders > 'Disable refresh as default'
+* Win10 bugfix: program restart from options dialog create a new tab
+* Some other fixes and code improvements.
+
+--------------------------
+Version 2.6.7.3 [2021-04-24] GPo
+--------------------------
+* Snapshot buttons in the slider window have got a context menu (Restore to current, Restore to new tab, Clear all) 
+* The background color of the sliders in the slider window can be changed. (Options > Font and colors > Advanced 2 )
+* Some new menu entries in the slider window and toggle tag context menus 
+* Under Win10, the mouse wheel should now also work on the video slider (if video window visible). 
+* Fixed: With the new wx version the Navigate > Bookmarks menu no longer worked. 
+*/
+One user did not like the fact that a message appeared in the status bar when the script was saved. 
+Now if the script is saved without changes, no more messages appear. Messages appear if the script is changed while saving,
+i.e. if toggle tags and filters are removed or an AvsP marked section is added to the script. 
+These messages are displayed for at least 3-4 seconds and disappear when you move the mouse in the video window. 
+Therefore, important messages are still displayed in the status bar. Without extra options for it.
+*/
+
+--------------------------
+Version 2.6.7.2 [2021-04-18] GPo
+--------------------------
+* Video window scroll bars can be hidden Options > 'Hide video window scrollbars'
+* Auto preview now also works when switching tabs with the mouse wheel (if mouse wheel is set for tab change) 
+* Toggle tags can be created or removed for the selected filter in the context menu of the slider window.
+* The toggle tags in the slider window have been given a context menu. Remove, Add child, Remove child
+- so there is the possibility with 'Add child' to create a check-radio item from two toggle tags. 
+- but use the toggle tags in the slider window with care, not everything can always be checked and changed automatically. 
+- the filter name can change in the slider window if e.g. the same filter is added again. 
+- if you not need or like it you can remove the menu entries under program options > User sliders > 'Hide slider window toggle tag menus'
+* Bugfix Special Comment #> only working correctly in the preview filters.
+- the special comment characters #> are a bit confusing. Sorry. Hopefully I didn't get lost with this option.
+- everything in the line behind #> is registered in AvsPmod as a text change and thus the script is then reinitialized. 
+- although in reality (for avisynth) there are no changes. For avisynth it is a normal comment.
+- at the moment it is only used for saving toggle tags within the script, but it also opens up possibilities for other functions. 
+- use it only for the toggle tags when a toggle tag is alone in a line. 
+ * And a few more code changes and a different wx version 
+** It's always a tightrope walk between functionality and ease of use **
+
+--------------------------
+Version 2.6.7.1 [2021-04-11] GPo
+--------------------------
+* The matrix (YUV > RGB) stored in the script (tv601, tv709) is preferably used. If the entry is found no matrix is read from the source.
+* If the > character is used after the comment character #, the comment is displayed in a different font #> 
+- the font can be set under Options > Fonts and Colors > Basic 1 > 'Comment extra #>' 
+Please set the font before using it for the first time. I can only load the default font theme. For example, if the dark theme is used, the font is not set correctly.
+If you use the dark theme you only have to reload the dark theme under 'Fonts and Colors'. 
+-
+* Toggle tags can be saved with the script. Program options > User sliders > 'Save toggle tags ...' Please read the tooltip!
+#>[sharp=0]
+sharpen (0.40)
+#>[/ sharp]
+- toggle tags are displayed with the font 'Comment extra' and the toggle tags are only comments for other programs.
+- in AvsPmod sharpen is disabled [sharp=0], but in other programs not. 
+- when opening in an external player (AvsP button) , the deactivated filters in the preview script are still removed. Everything as usual. 
+If you remove the toggle tags 'Clear all tags' and you have used the characters #> in front of the tag, and the option 'Save toggle tags' is enabled, 
+then all these characters will also be removed if the line contains only this characters. 
+The whole thing is intended to not lose the toggle tags when saving the script and not to have to use the function 'Save or read AvsPmod markings'. 
+Because so far the toggle tags were only saved in the session file or in the AvsPmod marked section.
+-
+* Added the possibility of using the toggle tag checkbox as a radio item. 
+- the name must be split into two parts by > and the second name must be present as a checkbox.
+-
+#>[sharp>unsharp=1]  # the check-radio box
+sharpen(0.4)
+#>[/sharp]
+-
+#>[unsharp=0]  # the child checkbox
+unsharpmask()
+#>[/unsharp]
+- in this example clicking on 'sharp>unsharp' toggles between the filters sharpen and unsharpmask. Useful in the preview filters.
+-
+* Add Toggle tag for one line, now the line must not be selected, only the cursor just needs to be on the line. 
+* Progress Dialog resize fix for Win OS versions below Win7
+* Added Options > 'Show available memory' displays for 3 seconds the available system mem in the status bar. 
+* The status bar displays also the available memory while loading the clip
+* Added DGHDRToSDR to the database
+-
+And a note:
+The sliders are a fine thing, but you should also use them with the right feeling.
+Use the filter exclusion list for the sliders. The creation of the sliders is time and resource consuming, minimize this effort to what is necessary. 
+source filters, trim, crop, addborders, prefetch, etc. can also be set wonderfully in the script.
+And there is still the possibility to switch the list on and off in the slider window if you want to see all of them.
+
+--------------------------
+Version 2.6.7.0 [2021-04-03] GPo
+--------------------------
+* Threads slightly revised. 
+* Split View now loads the second frame in a thread if threading is enabled. 
+* New menu Edit > Insert > 'Preview filter', insert Preview filter syntax for the selected lines ( Ctrl + P )
+- keyboard shortcuts may have to be checked, previously printing was linked to it, now (Shift + P) 
+* In the preview filter it is now possible to switch individual filters on or off  (Edit > Insert > 'Tag selection for toggling')
+-   /**avsp_filter
+-   [sharpen=0]
+-   sharpen(0.4)
+-   [/sharpen]
+-   unsharp()
+-   **/
+* In the preview filters you can now also use sliders that you have created yourself. I think ... I don't support this though.
+- I only support automatically generated sliders that are stored in the database or options.
+* Show free memory (program options > Misc 2)  
+- after creating a new clip displays the free system memory for 3 seconds in the status bar if the free memory less then x MB
+* Threads was enabled by default. Sorry. (on/off options menu 'Access Avisnth in threads')
+- If the threading works on your system, they offer more script security in the event of an avisynth error (hang). So turn it on.  
+- for more info please reade the readme_threads.txt
+
+--------------------------
+Version 2.6.6.9 [2021-03-27] GPo
+--------------------------
+** The syntax for the preview filter end has changed. The Preview Filter Area must now be completed with **/
+-    /**avsp_filter
+-   sharpen(0.4)
+-   **/
+* First public release with thread access to avisynth on create/release clip and get frame
+- on/off options menu 'Access Avisnth in threads'
+- default turned off, but I recommend turning on the threads and only to deactivate if there are problems.
+- for more info please reade the readme_threads.txt
+* Display YUV -> RGB conversion (Resolution-based, BT,709, BT.601) now script related.
+- conversion coefficient can be read from the source (frame properties). Or from the script when it was previously manually stored in the script. 
+- an asterisk * is preceded when the matrix has not read from the source ( *Rec601 ) 
+- under Program Options > Configure Statusbar, there is a new value %DYR to display the used matrix in the status bar.
+* Preview filter handling with the sliders revised. Should everything run a little better. ;)
+* Still some changes
+ 
+--------------------------
+Version 2.6.6.8 [2021-02-13] GPo
+--------------------------
+* Fix threaded playback with 'Auto' drop frames
+
+--------------------------
+Version 2.6.6.7 [2021-02-13] GPo
+--------------------------
+* New playback function Video > Play video > 'Use separate thread' 
+- Is switched on as standard, deactivate in case of problems or to compare.
+- So far the playback runs asynchronously in the main thread, if the function is activated, a separate thread is used for it. 
+-
+- The advantages are an immediate reaction to input from the mouse or keyboard. 
+- Disadvantages:
+-- Python threads behave differently than I am usually used to, therefore I can not yet estimate whether there are further disadvantages or even insurmountable problems.
+-- Unexpectedly! So far it's been going smoothly for me.
+-----
+* Fixed, I think: The playback continues if avisynth does not return a frame. (in both playback routines)
+* Fixed, slider window radio button labels now react to a mouse click (went lost through custom colors)
+
+--------------------------
+Version 2.6.6.6 [2021-02-06] GPo
+--------------------------
+* Added predefined 'Default dark' editor theme  
+* Also added slider window custom theme colors
+-- program options > user slider > 'Enable slider window custom theme colors'
+-- the colors can be set under otions > Fonts and colors > 'Advanced 2'
+
+--------------------------
+Version 2.6.6.5 [2021-02-02] GPo
+--------------------------
+* The filter exclusion list of the sliders has been revised, now also works with multiple identical filters. 
+-- my proposition for exclusion list (trim crop prefetch and 'Your SourceFilters'). The list can be changed options > User sliders
+* The filter exclusion list can be activate or deactivate in the context menu of the sliders.
+* Some changes to preview filter and sliders:
+-- preview filter index is showing on the sliders
+-- the decision for 'use' direct slider update improved (direct update only if slider in current preview filter). 
+* Update database, add 'ffms2_FFMS2', 'GamMac', 'TemporalDegrain2', update 'RGBAdjust', SmoothCurveC3
+* Some other changes
+
+--------------------------
+Version 2.6.6.4 [2021-01-24] GPo
+--------------------------
+* Resize filters can now be used in the preview filter (nice for SmoothLevel, SmoothCurve debug mode)
+* Bugfix DPI scaling
+
+--------------------------
+Version 2.6.6.3 [2021-01-22] GPo
+--------------------------
+* Slider window and sliders revised
+* The preview filter index is displayed on the right in the status bar
+* Fixed bug with selections (trim) marks
+* A few other changes
+
+--------------------------
+Version 2.6.6.2 [2021-01-16] GPo
+--------------------------
+* Automatic calculation of the DPI factor changed. (I can't test it and I hope it works)
+* Fix for tab change with separate video window
+* Bugfix step frame buttons
+
+--------------------------
+Version 2.6.6.1 [2021-01-10] GPo
+--------------------------
+* Preview filters revised
+* User sliders
+-- if direct slider update enabled (only with preview filters), can then be deactivated by pressing Ctrl on slider move.
+-- options > 'User slider' > 'Button show / hide applies to all tabs'
+-- sliders context menu new item 'Same width for all'
+* Error window font size now with DPI scaling
+* Step frame buttons got a context menu (frame, second, minute, custom jump). For those who can't let go of their mouse and beer ;)
+* Fixed separate video window zoom and flickering on tab change with mouse browse buttons.
+* Fixed separate video window shows no bookmarks and selections.
+* Fixed encoder_gui.py shows no path buttons, and a new button in the config part (please delete the encoder_gui.pyo)
+
+--------------------------
+Version 2.6.6.0 [2021-01-05] GPo, Happy New Year Edition
+--------------------------
+* Added to tab context menu 'Auto preview' find it out ;)
+* Tabs shown an indictor if clip not initialized (preview not ok)  '>' 
+** Preview filter, fast slider preview, fast compare preview. please open the examplePreviewFilter.avs (.txt)
+* The annoying behavior when rearranging the tabs fixed (scripts are initialized that do not yet have a clip)
+* User sliders
+-- the window interface revised (flicker)
+-- slider direct update with preview filters (optional)
+-- new menus in the context menu, check it out
+-- new fold option 'Fold or restore last order', under main options
+-- fixed user sliders makes two steps on the arrow buttons
+* New russian translations file, thanks to Doom9 user 'Shinkiro'
+* New menu 'Help' > 'Preview filter example'
+-- opens the examplePreviewFilter.avs in AvsPmod or shows the .txt version if not found.
+* and other changes
+
+--------------------------
+Version 2.6.5.3 [2020-12-23] GPo
+--------------------------
+* Options > Misc > 'Use large video controls' replaced by options > Misc 2 > 'DPI scaling video controls'
+* Changed some functions for DPI awareness
+*** Important*** The Guis in the Tools folder need to be updated.
+-- avs2avi_gui.py, encoder_gui.py, resize_calc.py
+-- To do this, the files must be overwritten and all .pyo files in the 'tools' dirctory deleted.
+-- Or unzip AvsPmod in a new directory and copy the options.dat from the old to the new directory. 
+-- Then copy the .dat files from the 'tools' directory to the new 'tools' directory. So that the settings of the Guis are retained.
+*Mary Christmas*
+
+--------------------------
+Version 2.6.5.2 [2020-12-20] GPo
+--------------------------
+* Added context menu to the 'play' button (right click)
+* Removed Play video > 'Drop frames'
+-- 'Drop frames' now in the play button context menu
+-- 'Auto' is the old one (video frame rate related)
+-- manually (2 - 16) is nice for fast playback (without filters), I get 1800 fps on maximum speed (but that's not real fps) ;)
+* Again tab bookmarks handling slightly revised. And that's not the end.
+* Synchronisation between 'menu bar' and 'context menu' items 'is item checked' improved.
+* Beta: High DPI Awareness
+-- added to menu Help 'DPI info'
+-- Options > Misc 2 > 'AvsPmod DPI scaling'
+-- set 'DPI scaling overall' to value 5 for 150 % scaling 
+-- play with the other values
+-- It's beta, so some elements may be not scaled 
+-- leave 'Use manual DPI scaling' checked (recommended)
+-- you can also use the scaling without a high resolution monitor.
+
+--------------------------
+Version 2.6.5.1 [2020-12-06] GPo
+--------------------------
+* Set tab bookmarks from session file slightly revised. 
+* 'Play loop' repeats playback at the end of the clip even without selections.
+* Playback continue after tab change if the new clip in the same group or it is a similar clip (frame count and dimensions-size).
+* Added to menu Trim editor > 'Selections to script'  and 'Selections from script', does what the title says.
+-- even if I repeat myself: Selections are made when 'Copy to clipboard' is selected in the Trim Editor.
+* Small other changes
+
+--------------------------
+Version 2.6.5.0 [2020-11-27] GPo
+--------------------------
+* Added to tab context menu 'Save view pos on tab change'
+* Added to frame text field context menu 'Set bookmark title'
+-- the title of the current bookmark is set with the text in the frame text field
+* Added to menu Trim Editor 'Clear all selections Globally', clears all selections in all tabs, see below
+* Selections now tab related if 'Tab change loads bookmarks' selected
+* Session file saves and restores the selections for each script
+-- info: Selections are made when you select 'Copy to Clipboard' in the Trim Editor
+-- if selections visible and 'Play loop' enabled the playback plays then only the selections
+* New Mouse browse buttons and key events if 'tab change' or 'bookmark jump' for mouse browse buttons selected.
+-- CTRL on video window = bookmark jump (only needed if tab count greater 1)
+-- SHIFT = jump to selection marks (also works with video control buttons 'bookmark jump')
+-- ALT = jump only to titled bookmarks (also works with video control buttons 'bookmark jump')
+* Fixed the big error on File > 'Close all tabs'
+* Fixed on loading from session file bookmarks can be assigned to the wrong tab
+* A lot of code changes 
+
+*** Note for script writers: ***
+The AvsPmod bookmark list was changed, only type 0 bookmarks may be added to the bookmark list.
+Use 'MacroSetBookmark'  when adding your bookmarks type 0 or 'AddFrameBookmark' when adding a mark (type 0,1,2)
+There is now a 'SelectionsDict' in which the selections are saved (type 1,2).
+
+--------------------------
+Version 2.6.4.9 [2020-11-14] GPo
+--------------------------
+* The sliders window:
+-- If the key 'Control' is pressed while using the Increment and Decrement buttons next to the sliders, 
+-- the change in the value is 5 times slower (the key Control does not have to be held down).
+-- But it is almost superfluous. Noticed too late: with left Mous down on the slider and then mouse wheel you can do it in single steps
+* Some fixes.
+-- warning for different bookmarks (script, tab) was broken in 2.6.4.3
+-- zoom 'Window fit' resizes automatically if video height smaller then window height
+-- key shortcuts for 'Zoom' fires after program start not on the first event
+-- 'Split View' zoom 'Window fit' improved
+
+--------------------------
+Version 2.6.4.8 [2020-11-11] GPo
+--------------------------
+* Some improvments to zoom setting 'Antialiasing' and the program interface
+-- scroll bars movement as fast as without antialiasing
+-- revised zoom 'Window fill'
+-- a few other changes
+
+--------------------------
+Version 2.6.4.7 [2020-11-10] GPo
+--------------------------
+Again bug fixes caused by the new zoom function 'Antialiasing'
+
+--------------------------
+Version 2.6.4.6 [2020-11-10] GPo
+--------------------------
+Bug fixes caused by the new zoom function 'Antialiasing'.
+
+--------------------------
+Version 2.6.4.5 [2020-11-08] GPo
+--------------------------
+* Fixed zoom settings with keyboard
+* Fixed zoom setting 'Antialiasing' cannot be disabled with key shortcut
+
+--------------------------
+Version 2.6.4.4 [2020-11-08] GPo
+--------------------------
+** If there are any problems, it's a test version, if not, it's a regular one ;)
+* New menu Video > Zoom > 'Antialiasing', draws the preview antialiased (bilinear) if the zoom is not equal to 100%
+-- drawing requires more power, I have done a lot that the preview does not jerk with mouse movements or playback. 
+-- but when the scroll bars are moved manually you can feel the difference.
+-- It will be temporarily deactivated during playback or if crop editor shown and on some other events. 
+-- check it out, I don't know if it works on all systems without errors. 
+-- And I don't know yet whether it will be kept. It took a lot of effort to implement it and if it causes bigger problems then I throw it out.
+* New Options > Video > 'Startup with last zoom settings'
+* Small other (fixes) changes
+
+--------------------------
+Version 2.6.4.3 [2020-11-01] GPo
+--------------------------
+* 'New tab from snapshot' now sets the current frame number (if possible)
+* Get pixel info from avisynth now disabled if snapshot visible
+* Fixed 'Copy to new tab' not copying the tab bookmarks
+
+--------------------------
+Version 2.6.4.2 [2020-10-31] GPo
+--------------------------
+* New Menu 'Video > Snapshot': Intended for resource-saving comparison of simple settings (sharpness, color, etc.)
+-- 'Take snapshot' stores a bitmap from the current frame (tab related)
+-- 'Show/hide snapshot',  if the snapshot frame number and current frame number different, you must hit again 'Show/hide snapshot'.
+-- At the top left the video window shows which snapshot is displayed.
+-- Use shortcuts so that you can easily take, show or hide the snapshot.
+-- Snapshot hides only automatically if the frame number changed or crop editor is shown (at the moment)
+-- Further menus: Clear tab snapshot, Clear all snapshots Globally, New tab (script) from snapshot
+* Tab bookmarks now saves the bookmark titles
+* Added 'Bookmarks > Titled bookmarks > Remove all title', removes all titles from the current tab bookmarks
+ 
+--------------------------
+Version 2.6.4.1 [2020-10-16] GPo
+--------------------------
+* New item in Bookmarks menu 'Clear tab bookmarks' clears only the current tab bookmarks (idea by real.finder)
+-- is disabled if tab context menu option 'Tab change loads bookmarks' is disabled
+* 'Clear all bookmarks' renamed to 'Clear all bookmarks Globally'
+* Fixed zoom option 'fill window'
+* Fixed current tab bookmarks not always saved in session file
+
+--------------------------
+Version 2.6.4.0 [2020-10-10] GPo
+--------------------------
+* Added to tab context menu 'Split View insert tab'
+-- inserts a copy of the current tab next to the current tab and activates Split View.
+* High Res icon now as default app symbol icon (again thanks to Doom9 user 'color')
+* Small other changes
+
+--------------------------
+Version 2.6.3.9 [2020-09-16] GPo
+--------------------------
+* Split View small changes (zoom, error handling)
+* AvsMeter.exe 3040 args has changed, you must change the args under otions > paths > 'external tool' 
+-- arg1 use  AvsMeter info|-avsinfo
+-- arg2 use  AvsMeter|%fn   ( %fn is now needed to pass the script file name )
+* New AvsPmod.exe file with high res app icon. Many thanks to user 'color' from the Doom9 forum
+-- for all Win10 Tile Fritzen, in German it sounds better (Für alle Win10 Kachel Fritzen) ;)
+-- and for those who use large desktop icons. 
+-- use it, delete it, sell it, do what you want with it
+-- if you use it, you have to replace the AvsPmod.exe in the root directory with this high res version.
+-- the file is in the folder 'AvsPmod_high_res_ico_version'
+
+--------------------------
+Version 2.6.3.8 [2020-09-13] GPo
+--------------------------
+* Split View rewritten
+- no selection of next or previous tab, the next tab is always the second view
+- if the last tab is selected when Split View is activated, the previous tab is used as the first view
+- the split view tabs can now be switched back and forth and split view remains activated. 
+---- e.g.: activate Split View on tab 1, you can switch between tab 1 and tab 2 and Split View remains switched on.
+- script update and error handling improved
+
+--------------------------
+Version 2.6.3.7 [2020-09-11] GPo
+--------------------------
+*New function called Split View (Check it out)
+- Splits the video window in two views and draws (optional) the next or previous tab in the same View.
+- Both videos must have the same width and height.
+- When you select video > 'Split View on/off' and Split View is disabled:
+--- if tab count 1, the tab is copied and Split View is enabled
+--- if tab count 2, Split View selects the correct tab automatically and splits the view
+--- if under options Video > 'Use next tab for Split View' selected: the next tab is the second view otherwise the previous tab
+- if a tab is changed, Split View is always deactivated
+- always the left view is the source for zoom and positions calculations
+- To avoid confusion, remember: if 'use next tab' (default) the left view is the selected tab, otherwise the right view is the selected tab
+- Choose your option, the default value 'next tab' was only used because it is more manageable at first.
+* The menus in the video menu has ben repositioned
+
+--------------------------
+Version 2.6.3.6 [2020-08-30] GPo
+--------------------------
+fixed the new version cannot load the old session files
+
+--------------------------
+Version 2.6.3.5 [2020-08-29] GPo
+--------------------------
+*When changing tabs and 'Tab change loads bookmarks' is enabled:
+- if the tab has no bookmarks, bookmarks now cleared
+- the current tab bookmarks are saved and restored even if they were not previously written into the script
+- if bookmarks reading from script and bookmarks from tab different a message appears (can be disabled under options)
+-- useful: if you add bookmarks and change the tab but you forgot to save the bookmarks to the script, you can now restore the bookmarks
+*Save Session, Load Session saves and loads the bookmarks for each script.
+*Fixed the selection marks bug on tab change and on restore bookmark from selections mark
+*New macro 'Open Image Sequence.py' read the information inside the macro
+*A bit of cosmetics in the text field context menu
+
+--------------------------
+Version 2.6.3.4 [2020-08-05] GPo
+--------------------------
+- Changed: If trim dialog is shown you can again jump to any bookmark. (@in4u) 
+- When you close all tabs or the last tab, all bookmarks now deleted.
+- Two new options 'Video > Trim Editor > 'Mark trim points' and 'Restore bookmarks' for more info read the tooltips (statusbar)
+- fixed: trim editor doesn't move the bookmarks on the first selection.
+
+--------------------------
+Version 2.6.3.3 [2020-07-24] GPo
+--------------------------
+- fixed close all tabs error
+
+--------------------------
+Version 2.6.3.2 [2020-07-19] GPo
+--------------------------
+- fixed bookmark highlighting doesn't update immediately on set or remove
+
+--------------------------
+Version 2.6.3.1 [2020-07-17] GPo
+--------------------------
+*Bookmarks now restored if a trim editor selection mark over a bookmark and the selection mark deleted  
+*Playback improved, smoother playback (If the 'fps' can be reached)
+*New macro 'Selected trims to selections'
+- Insert all selected avisynth trims as trim editor selections. Or deled the selection if it exist.
+- e.g. script selection is #Trim(10, 100) ++ Trim(120, 200).Reverse() , insert selection 10-100 and 120-200
+*Fixed: The video slider was highlighted after closing the trim editor and a bookmark was selected.
+*Fixed: Crop editor drawn the cropped area on large zoom not correctly +- 1pix ;)
+
+--------------------------
+Version 2.6.3.0 [2020-07-11] GPo
+--------------------------
+- fixed error if playback on closing tab
+
+--------------------------
+Version 2.6.2.9 [2020-07-10] GPo
+--------------------------
+*Added to menu Video > Play video > 'Play loop'
+- Plays the trim editor selections from frame start to frame end in a loop
+- Press Home (Pos1) select the trims then select 'Copy to clipboard' and hit 'Ok', the selections are retained.
+*Added a clear button to 'Trim selection editor'. Clears all trim editor selections.
+*Also added to menu Video > Trim selection editor > 'Clear selections'. Clears all trim editor selections.
+*If you begin playback and the current frame is the last frame, playback starts at frame 0 or loop_start is 'Play loop' selected
+*Added: When the Trim editor is visible and the video slider is on a start or end mark, the color is highlighted. 
+- also added to frame text field context menu 'selection highlight color...' set the color for highlighting the selection mark
+*Changed: If the trim editor is visible, only the selections marks are selected with the buttons 'bookmark jump'.
+- if the trim editor is not visible, this can be done by holding down the control key.
+- the same behavior when the mouse pointer is in the slider area and ctrl is pressed and you use the mouse browse buttons.
+*Add or remove # with mouse left press and right click improved. Doesn't now change if # or ~ or * the next char, e.g. Style or Block comment.
+*If word boolean selected (True,False) press left and right click changes the boolean value. (left down, left up, left down and hold down, then right click)
+*Menu Tools > 'Script encoder (CLI)'
+- if you change the output path manually, the directory is now created if it does not exist
+- added option 'Output file name to new tab', insert in a new tab the output name depended of the source files templates
+- !! For the update you must delete 'tools\encoder_gui.pyo' if it exists.!!
+*Fix: With a mouse click on the video slider area the position was not changed if play back was active.
+***This stubborn error message 'MOUSE_CAPTURE_LOST' has been fixed. Error log should now remain empty ;)
+and some real improvements
+
+--------------------------
+Version 2.6.2.8 [2020-07-04] GPo
+--------------------------
+- Macro 'Save Image Sequence.py' got a nice update (changelog in the macro), try it.
+- Fixed: After a crash AvsPmod doesn't load the last session automatically.
+- Fixed the Crop Editor, works also now nice one large zooming
+- other small fixes
+
+--------------------------
+Version 2.6.2.7 [2020-06-27] GPo
+--------------------------
+* 'Run analisys pass' revised. Dialog shows now average fps in real time.
+* A checkbox for restarting has been added to the options dialog, if activated the program restarts. 
+* Video menu slightly revised, new menu 'Tools'
+* Path and parameters for an external tool added.
+- Options>Paths>'External tool', parameters predefined for AvsMeter.
+- The menus are locatet under: Video>Tools>'External tool arg1' and 'External tool arg2'
+- Menu label can be changed separator is | , e.g. AvsMeter|-gpu
+- The char > is a switch and replace the script name with the text before. 
+-- e.g. AvsMeter info|avsinfo>-lf (not the script name is passed but 'avsinfo' and arg -lf)
+- Or run another tool with two different parameters
+* Fixed: 64bit version doesn't load avisynth.dll from custom directory
+* Check for duplicate function names removed
+
+--------------------------
+Version 2.6.2.6 [2020-06-20] GPo
+--------------------------
+*'Save image' and 'Quick save image' revised:
+- Save image dialog: If the frame number is not changed, the name (the formatting) is then used for 'Quick save image'.
+- Otherwise the standard formatting is used for 'Quick save image'.
+- If CTRL is held down while clicking 'Quick save image', the standard formatting is used (reseted).
+- You can read this in the status bar when the mouse is over the respective menu (tooltips)
+-
+*Status bar with display suppression:
+- If an image is saved with 'Quick save image' or bookmarks are loaded, 
+- the information (name, count) is displayed in the status bar for min 3 seconds. Other information is suppressed.
+-
+Show Calltip with Ctrl + Alt removed, problems with other shortcuts.
+
+--------------------------
+Version 2.6.2.5 [2020-05-25] GPo
+--------------------------
+fixed: refresh video (F5)
+
+--------------------------
+Version 2.6.2.4 [2020-05-24] GPo
+--------------------------
+fixed: when the slider window was visible and a new tab was created the image in the video window disappeared at this time.
+fixed: when the first script was opened the video window flickered slightly.
+
+--------------------------
+Version 2.6.2.3 [2020-05-23] GPo
+--------------------------
+Sorry for the save options bug in the last version. Component for mouse wheel func was changed but the option name not.
+After fixing the wrong name, the bug still occurred if the own options were kept and no new value was set in the options 
+for the mouse wheel function. That is now fixed.
+
+Added and Changes:
+- Press Ctrl and double click on the video window, expands the height some pixels
+- Temporal enable/disable show 'Filter calltips' even if the option disabled: 
+---- Edit > Avisynth function > 'Show calltip' you can assign a key shortcut, I use F1
+---- Options > Text > 'Show filter calltips Ctrl+Alt' when key Ctrl+Alt together pressed enables/disables calltips temporal
+-------- Beta, no idea if there are any conflicts with user defined shortcuts. But I do not think.
+- During playback, the fps is displayed in the status bar in real time. This is an average value.
+- The normal playback routine has become a bit speed improvement, but I recommend the new one. 'Use faster playback routine'
+Misc:
+- fixed: program crashes If a user slider was changed and playback was active.
+- some code changes
+
+--------------------------
+Version 2.6.2.2.r2 [2020-05-21] GPo
+--------------------------
+bugfix save options error
+
+--------------------------
+Version 2.6.2.2 [2020-05-18] GPo
+--------------------------
+- Added: Menu Video > Play video > 'Use faster playback function', 0 % to 38 % faster playback, depending on CPU load.
+- Changed: during playback no pixel information is shown in the status bar. It is pointless to show.
+- Changed component for 'mouse wheel function' please select your option new
+---- Item 'Tab change or scroll' behaves like the original version 2.5.1
+- Issues fixed, script doesn't updated immediately.
+
+--------------------------
+
+Version 2.6.2.1 [2020-05-15] GPo
+--------------------------
+- Program Single Instance now differentiates between 32bit and 64bit instances.
+- Left down right click (zoom 100/200%): After mouse right up button, you can now move the video window directly if left down.
+- On full size double click, the script resets to the height before (if tab not changed).
+- The area without response next to the buttons of the video slider in trim mode has been reduced. (now 2 pixels) 
+- Some bugs caused by switching to another wxPython version have been fixed. I hope all.
+- Other changes
+
+--------------------------
+Version 2.6.2.0 [2020-05-08] GPo
+--------------------------
+- Added a new mouse event on the script (Left down right click) 
+     - add or remove the first char # on each selected line
+     - nice for enable/disable avisynth functions or whatever
+- Revised zoom fit and fill, fit is now scaled correctly even with a newly loaded script
+- Fixed, Programs Single Instance
+- Bugfix, With every frame step the video window was enlarged when zoom fit or fill was selected.
+- some other changes
+
+--------------------------
+Version 2.6.1.9.r2 [2020-05-01] GPo (bugfix)
+--------------------------
+- bugfix frame text input:
+     The text is now no longer selected, as a substitute the background color of the entire field is now changed.
+     The wxPython version I use generates a wx.Bell event when I enter 'Enter' on the keyboard, I don't like that. 
+     That's why I chose the lesser evil for me (and for you?).
+
+--------------------------
+Version 2.6.1.9 [2020-04-29] GPo (small changes)
+--------------------------
+- Add new avisynth type 'a' (avisynth with array, pinterf v3.52)
+- Mouse browse button function revised.
+    - now also works on the tabs, video controls and status bar
+    - if the cursor is over the video controls or status bar, a 'Bookmark jump' is called
+- a bit cosmetic: statusbar text, bookmark jump with mouse browse buttons shows wait cursor.
+
+--------------------------
+Version 2.6.1.8 [2020-04-04] GPo
+--------------------------
+- Add mouse browse buttons (forward/backward(AUX2,AUX1)) functionality on script and video window
+    - Options > Misc > 'Mouse browse buttons' 
+        - (for more Info please have a look on the tooltip) 
+- Changed component for middle mouse button function, please select your middle mouse button option new.
+- Changed the functionality for a tab change with the mouse wheel or browse buttons:
+    - Tabs always changed now, no more video window move possible with mouse wheel. That was irritating.
+    - Are there tabs with similar videos or tabs with the same group, then only these tabs are selected (As usual).
+        - Otherwise all tabs are run through.
+        -  (The option for 'similar' or 'group' can be changed under Option > Video)
+- Bugfix Close Tab, Close all Tabs, Mouse wheel on video window
+
+--------------------------
+Version 2.6.1.7 [2020-03-29] GPo
+--------------------------
+- Compatible with Win10 UTF-8
+- no other changes
+
+--------------------------
+Version 2.6.1.6 [2020-03-29] GPo
+--------------------------
+- only test build for Win10 with UTF-8
+
+--------------------------
+Version 2.6.1.5 [2020-03-28] GPo
+--------------------------
+- Added to the tab popup menu:
+    - 'Close all other' close all the other tabs
+    - 'Release video memory' for the selected tab
+    - 'Release all other video memory' releases all other tabs video memory
+- Beta! Check at startup for multiple functions with the same name. (env.get_var("$PluginFunctions$"))
+    - Either I'm doing something wrong or avisynth, but you can easily deactivate it ;)
+- WndProc WM_COPYDATA features expanded
+
+--------------------------
+Version 2.6.1.4 [2020-03-01] GPo
+--------------------------
+- Changed the 'AvsP marked script' and original script compare routine
+---- Now no md5 Hash needed, only simple text compare is used
+
+--------------------------
+Version 2.6.1.3 [2020-03-01] GPo
+--------------------------
+On the topic: Save or read marked script
+- By default 'Save or read marked script' is now activated again.
+- Optional selectable warnings removed, keep it simple.
+New behavior:
+The md5 hash of the original script is now saved within the 'AvsP marked script' and is compared when it is reopened.
+If there are differences, a warning appears, this warning cannot be deactivated.
+So you can turn on to save or read 'AvsP marked scripts' and you only get a warning if the original has been changed.
+
+--------------------------
+Version 2.6.1.2 [2020-02-29] GPo
+--------------------------
+---- By default 'Save or read marked script' is now deactivated (Options > Save\Load > 'Save or read avs scripts with AvsPmod markings'.
+---- Now, if the option deactivated, AvsPmod doesn't read the marked script, otherwise a warning is displayed.
+---- But if 'you know what you doing' you can disable the warning under the options. Problems with marked scripts, see Doom9.
+- Bug Fix, the screen cursor goes crazy if the script auto update deactivated
+- Changed some default program settings (for the new users).
+
+--------------------------
+Version 2.6.1.1 [2019-11-10] GPo
+--------------------------
+- changed WM_COPYDATA 
+- Added changes from r2 and r3 release
+- Compatible with AvsPThump v2
+
+--------------------------
+Version 2.6.1.0 [2019-09-05] GPo
+--------------------------
+- Bugfix filename "Quick save Image"
+---- Quick save filename stores the last saved name (Save Image as...) 
+---- Quick save filename does reset to default (Option>Save/Load>"Image default filename pattern") on Startup and  any Tab close
+---- Save Image as... resets always to default filename
+---- To apply a desired file name:
+--------- You must first save the image with "Save Image as ...".
+--------- The file name is then used for "Quick save Image".
+- Zoom increased to 40x
+- Update ffmpg.presets and x264.presets
+
+--------------------------
+Version 2.6.0.9 [2019-08-10] GPo
+--------------------------
+- Bugfix zoom video window
+- Encoder gui and ffmpeg.presets update
+Note: In the AvsPmod 'tools' directory the 'encoder_gui.pyo' has to be deleted 
+
+--------------------------
+Version 2.6.0.8 [2019-07-22] GPo
+--------------------------
+- Added middle mouse button behavior on the script can be changed. options>misc (now default: show frame if script not empty)
+- Added tab context 'Tab change load bookmarks' enables, disables temporal the function
+- Added video info 'bits_per_component' (bitdepth), see option>video>customize the status bar %BIT
+- Added indicator if the pixelinfo (RGB, YUV, HEX) returned from avisynth or display, it's from display an asterisk is shown *
+- Removing annoying and unneeded force script update after saving the script.
+- a few other code changes
+
+--------------------------
+Version 2.6.0.7 [2019-07-20] GPo
+--------------------------
+- Bug fix: RGB48 planar, RGB64 planar displayed values wrong
+- Some small changes I do not remember ;)
+r2 - Added show pixelinfo on tab change with keyboard, if mouse pos in video window
+
+--------------------------
+Version 2.6.0.6 [2019-02-05] GPo
+--------------------------
+- Known issues with the Avisynth V6 header fixed. 
+
+--------------------------
+Version 2.6.0.4 [2019-01-25] GPo
+--------------------------
+- Bug fix: 32bit Version crashes
+- Bug fix: YUV values can be wrong.
+- Bug fix: 'Add tab to group' from context or video menu resulted in an error.
+- Change the handling of plugins dir. There should never again problems.
+- Error handling if avisynth.dll can not load. Source from vdcrim.
+Change the db click behavior on video window, if video smaller than the window height, 
+script window expands the height full (not only to the set minimum lines count).
+
+--------------------------
+Version 2.6.0.2 [2019-01-07] GPo
+--------------------------
+Bug fix version
+
+--------------------------
+Version 2.6.0.1 [2019-01-04] GPo
+--------------------------
+- Added to Trim Editor the option 'Single clips' with custom prefix, this insert c0=Trim(?,?)..cn=Trim(?,?) commands.
+- Added to frame text field Context Menu 'bell at bookmarks' and 'highlight bookmarks', 
+--- make a sound or highlight the slider if the current frame in the bookmarks. Also added 'set highlight color...'.
+- Added to Option menu 'Make fonts and colors backup' and 'Load fonts and colors backup', you can copy the 'backup_style.dat' file 
+--- created in the AvsP directory into a different AvsP directory and when loading only the text style and color will be changed.
+- Change 'Video > Save view pos on tab change' default now checked false.
+- Fixed: frame text field set wrong color or does not update the color if bookmark added or deleted with right mouse button on the slider.
+- Trying to cancel the script if the message 'Error requesting frame' in a non-ending loop. You must press 'Cancel' on the message box.
+--- try first 'OK', only press 'Cancel' if the message in an non-ending loop, but if the system out of memory, nothing helps!
+--- at this error, if you press 'Cancel', the session and script is saved as '_LastErrorSession.ses, _LastErrorScript.avs' in the AvsP program folder. Hopefully.;)
+--- !!! On my test, however, (paranoid mode is not for me)
+------ 'OK' was not always the best choice, when you trying to freeing the memory manuele Freezes AvsP and you have no chance to save the script.
+- Trying to fix some rare bugs and other changes.
+
+--------------------------
+Version 2.5.1.17 [2018-12-25] GPo
+--------------------------
+only source published
+https://github.com/gispos/AvsPmod
+
+--------------------------
+Version 2.5.1.16 [2018-12-08] GPo
+--------------------------
+- AvisynthPlus (pinterf) fork Neo r2822 compatible, added 'func' to avisynth value parsing
+
+--------------------------
+Version 2.5.1.15 [2018-11-17] GPo
+--------------------------
+- Removed wrong Rec2020 display conversion. Sorry.
+- Removed 'Restore bookmarks'
+- Improved status bar flickering.
+- Improved DoubleClick event on video window, reduced flickering on the bottom
+- Improved add 'New Tab' flickering if the script is loading or copying
+- Added 'Options > Misc > On first script load bookmarks from script'. If tab count 1, automatically load bookmarks from script.
+- Added 'Options > Misc > Tabs changing load bookmarks from script'. Automatically load bookmarks from script if tab is changed.
+--- in one session each script can now have its own bookmarks.
+- Added 'Video > Save view pos on tab change', saves, restores the XY display coordinates on tab change if the clip not in the same group.
+- WndProc features expanded, AvsPmod can receive WM_COPYDATA
+
+--------------------------
+Version 2.5.1.14 [2018-11-06] GPo
+--------------------------
+- Changed, Bookmarks now in SubMenus 'Video > Bookmarks', added Menus' Bookmarks to script' and 'Bookmarks from script',
+--- also added to Tab Context menu ' Bookmarks to script' and 'Bookmarks from script' and 'Restore bookmarks' last one is beta.
+--- 'Restore bookmarks': 
+------  if you delete all bookmarks at once, the current script stores first the global bookmarks, and you can restore this bookmarks to globals. 
+------  In the future maybe more or I will delete it. (it's experimental) You do not have to use it.
+- Changed 'Options > Video > Error message font', font color is now saved, drawback: button will never shown the selected font.
+- Add YUV to RGB display conversion for Rec2020 (TV level).
+- Added format detection for avs_plus colorspaces.
+- Add WndProc for custom messages from and to other programs. Win User only. see 'AvsPmod_WndProc.txt'
+- Fixed a few unimportant bugs
+
+--------------------------
+Version 2.5.1.12 [2018-09-29] GPo
+--------------------------
+- Add Execute macro-file automatically when a avs file over cmd is processed, file must be located (rename it) in program\macros\startup_avs.pys
+- Add Execute macro-file automatically when a source file over cmd is processed, file must be located (rename it) in program\macros\startup.pys
+- Add Execute macro-file within comandline '-em': AvsPmod "G:\Video\Star.avs" "-em D:\AvsPmod\macros\MyHidenMacro.pys"
+- Add If a *.py or *.pys file is passed as an argument via cmd, or with the file open dialog, it will be treated as a macro (Execute Macro), 
+--- same behavior as with parameter -em, except file ext must be .py or .pys
+- Add comandline parameter -sf, -sf 212 force AvsPmod to show the frame number 212 after startup
+- Change the checked status "Video > Play video > Drop frames" now at startup checked=False
+- Add "Option > Save/Load > Ask to save the script at program exit > Only when script exists"
+- Add Menu "Edit > Toggle text wrap"
+- Add Menu "Video > Toggle extended left move" - allows the video display to move more to the left (important to me)
+--- video must be wider than half window width and no zoom fit or fill may be set.
+- Error handling on AvsPmod x64: Error "FormatTime - %d cannot convert float" (only handling no fix) - avisynth returns NaN value, no idea how I can fix this
+- This makes me happy;), add DoubleClick event on video window, toggle min script lines "0, default"
+- Add Zoom with left mouse button down and wheel rotation (default control down and wheel rotation) I am a mouse junkie..)
+- Add Already existing option "invert wheel direction for scrolling the tabs" inverts also zoom wheel direction 
+- Add "Option > Video > Mouse Wheel Function" -  Tabs scrolling default, Frames steps (I have with wheel frames steps no problems)
+- Add "Option > Misc > Invert scroll wheel direction (Frame)", also change text "Invert scroll wheel direction (Tabs, Zoom)"
+- Add Toggle the zoom (100%, 200%) with left button pressed and right button click. If zoom is fit or fill or <> 100%, zoom does change to 100%
+- Changed zoom save at program exit, only 100%, fit or fill is now saved. Also limit the mouse wheel zoom factor min,max: 0.10, 20.0
+- Improved on some functions displayed cursor wait status, clearer indication "program processed, picture is not ready"
+- Change the frame number-Text Field Context Menu click event, on click shows now the selected frame number, no keyboard key 'enter' needed
+- A bit of the German language file edited, well.
+- Some other changes
+
+--------------------------------------------------------------------------------------------------------------------
+
+Version 2.5.1 [2013-06-25]
+--------------------------
+
+- Add 'toggle preview placement' menu option - the video preview can be placed now to the right of the script
+- Add 'open script's directory' menu option
+- Add 'interpret escape sequences' and accelerator keys to the find/replace dialog
+- Fixes to the handling of function definitions
+- Other minor changes and fixes
+
+
+Version 2.5.0 [2013-06-04]
+--------------------------
+
+- Tabs can be assigned to groups. Tabs on the same group share the timeline, optionally applying offsets
+- Add 'enable scroll wheel through tabs on the same group' setting
+- Snippets of text can be associated to a tag and inserted in the script
+- Remove 'customize autocomplete keyword list' and add its functionality to the 'AviSynth function definition' dialog 
+- Improve 'autocomplete parameter' menu option and add filename string auto-completation
+- Add highlighting styles for unknown functions, parameters and assignments
+- Add setting for highlighting words as functions when in doubt
+- Fix slow typing on very large scripts
+- Scripts can be exported as HTML
+- Add 'quick save image' menu option
+- Add setting for customizing the default filename pattern used for saving images
+- Add setting for not prompting for JPEG quality when saving
+- Allow to save RGB48 data as 16-bit PNG
+- Improve output path options in the 'Save Image Sequence' macro
+- Update the current frame number when switching tabs also when the preview is hidden
+- Check that requesting a frame succeeded before attempting to use it
+- Fix error message appearing on preview refresh for user sliders with a custom modulo on its label
+- Fix empty translation files not being filled on start
+- Other minor changes and fixes
+
+
+Version 2.4.2 [2013-03-10]
+--------------------------
+
+- Function definitions can be imported now from a new wiki
+- Allow specifying what sources of function definitions to read on start
+- Updates to the filter database
+- Add syntax for function parameters not included by default in autocomplete, [arg info]
+- Add 'autocomplete parameter' menu option, Ctrl+Alt+Space shortcut
+- Add 'copy image to clipboard' menu option
+- Speed-up handling of a large number of bookmarks
+- Fix corruption of the margin of the video preview
+- Fix tab renaming
+- Add a new macro function 'ClearBookmarks'
+- Improve 'Bookmarks at Intervals' macro
+- Other minor changes and fixes
+
+
+Version 2.4.1 [2012-12-05]
+--------------------------
+
+- Add 'reload script' menu option
+- Add 'use large size video controls' setting
+- Add 'invert scroll wheel direction' setting
+- Improve video zooming on Ctrl + mouse wheel
+- Fix the 'navigate' menu options needing to be pressed two times when using a separate window for the video preview
+- Fix the dragging of the handle of the separate window preview's slider
+- Fix ScriptFile and ScriptName being swapped
+- Accept several clip properties on the Pipe macro function's command line
+- Other minor fixes
+
+
+Version 2.4.0 [2012-11-27]
+--------------------------
+
+- Add AvxSynth support. AvsPmod runs now natively on *nix
+- Add script playback (video only)
+- Add 'keep variables on refreshing' menu option, useful for dealing with heavy scripts
+- Detect correctly AviSynth 2.6.0 new color spaces
+- Add temporary support for VapourSynth AVIFile scripts (.vpy)
+- Add option to specify directly the location of avisynth.dll/libavxsynth.so
+- Add option to change the autoload plugins directory
+- Add option to choose an alternative working directory
+- Accept some variables on 'program settings' paths: %programdir%, %avisynthdir%, %pluginsdir%. Useful for portable use.
+- Add 'undo close tab':
+  - file menu -> undo close tab
+  - middle click on empty tab bar space
+  - Ctrl+Shift+N default hotkey
+- New find and replace dialogs with added features
+- Add auto-crop option to the crop editor
+- The crop editor can be used now with the video preview zoomed or flipped
+- Add a new variable to the video status bar - bookmark title (%BM)
+- Improve avs and avsi files association option:
+  - on Windows, prompt to associate files for all users or only the current one and ask for permissions for the former
+  - on *nix, this choice is made by starting AvsPmod as root to associate for all users. The application is also registered on the desktop environment's menu.
+  - make the option toggleable
+- Improve default filename on prompts:
+  - add two new settings to the options dialog, 'save/load' tab
+  - better basename choice on save image dialog and fix last saved image's name still being used when changing tabs
+  - add 'default' parameter to several macro functions
+- The mouse wheel can be used now to scroll through tabs
+- Ctrl + mouse wheel can be used to zoom the video preview
+- If 'enable scroll wheel through similar tabs' is off the mouse wheel can be used to scroll vertically the video preview, or horizontally with Shift pressed.
+- The CLI script encoder now checks PATH and the tools subdirectory before asking for the path to the executable
+- Fix opening and saving Unicode scripts
+- Fix decoding of command line arguments
+- Fix ScriptFile, ScriptName and ScriptDir functions not returning the right value [AviSynth 2.6.0]
+- Fix 'share timeline' option being always in effect
+- Fix 'last scrolled frame' menu option for 'update video while dragging' on
+- Fix tabs without filename still being closed when canceling a save dialog
+- Fix stop button of the avs2avi GUI tool
+- Add new macro function Pipe, for sending video frame data to external applications
+- Add 'propose' and 'only' parameters to the GetScriptFilename macro function
+- Add 'clean' parameter to the GetText macro function
+- Improvements on the 'Import bookmarks from file' macro:
+  - add timecode format v1 parsing
+  - add support for list of frames on TFM log u/b section and optimize its parsing
+- Merge 'Save bookmarks to images' macro into 'Save Image Sequence'
+- Fix Python 2.6 compatibility
+- Other minor changes and fixes
+
+
+Version 2.3.1 [2012-07-22]
+--------------------------
+
+- Add detached video preview window visibility options:
+  - Always on top of other windows ('Options' menu)
+  - Always on top of the main window ('Program Settings' dialog, needs restart)
+- Add printing support 
+- Disable showing line numbers if 'line margin width' option is 0 
+- Don't fail to launch AvsPmod if the option files are damaged
+- Work around event ID overlapping when working with a large number of bookmarks by disabling 'Go to bookmark' submenu for more than 1000
+- Add version info to the macro API
+- Add draw lines option to the GetPixelInfo macro function, and fix marks position
+- Rename the last executed macro return value from 'last' to 'avsp.Last'.  The former is still accepted.
+- Add 'Macros - Extra' section to the translation files.  Strings that no longer exist are deleted from the translation files when updating to a new version.  That means that translation strings added for the user for macros not bundled with AvsPmod are lost. This new section at the end is copied verbatim from the original file.
+- Rename 'Bookmarks from Chapter' macro to 'Import bookmarks from file' and add support for some other file types:
+  - TFM log (combed, possible combed and u/v mismatches)
+  - x264 QP file
+  - XviD and SCXviD log
+- Fix performance issues in the 'Bookmarks at Intervals' macro
+- Other minor changes and fixes
+
+
+Version 2.3.0 [2012-06-04]
+--------------------------
+
+- Add an option to decide based on the video resolution the coefficients used in the conversion to RGB for the video preview
+- Add 'Run analysis pass' to the 'Video' menu (for two-pass filters)
+- Add periodic session backup option
+- Add an option to not prompt to save a script if it doesn't already exist on the filesystem
+- Add original source time (%ST) and encoded frame type (%EFT) to the video status bar options (only works with ffms as source filter and no temporal filters in the script)
+- VirtualDub and VFAPI plugins can be also inserted now with the 'Insert plugin...' menu option and the 'GetPluginString' macro function, and be dropped over a script
+- Fix exception opening the crop editor
+- The default filename in a save script dialog wasn't taken from the first source in the script in some cases
+- Saving an image with an unsaved script not longer causes to include a '*' in the default output filename
+- Solved single instance + restart AvsPmod + child process still running -> socket error
+- The interface language can be chosen now from the options. Several translations are included.
+- Add macro files to the translations
+- The macro documentation can be checked now with 'help(avsp.function)' or 'help(avsp)' from a macro
+- All included macros and macro functions support unicode strings now
+- Add persistent storage to macros - 'Options' dictionary 
+- Macros can run now in its own thread by including a comment line like: # run macro in new thread
+- The macro API functions are now thread-safe
+- Add a new macro function 'SafeCall' for thread-safe calls in separate-thread macros and tools
+- Add a new macro function 'GetPixelInfo' that waits for the user to click on the video preview and returns the coordinates and colour of that point
+- Add a new macro function 'GetVar' to retrieve the contents of a specified Avisynth variable. Some limitations apply.
+- Update GetTextEntry macro function with new types of entry, multiple entries per row and customizable width, backwards compatible
+- Add an optional cancel button to the MsgBox macro function
+- SaveImage macro function also accepts now JPEG quality as a parameter
+- Fix ProgressBox macro function 'Cancel' button
+- Fix SaveScript macro function 'filename' parameter
+- Add new macro 'ConditionalReader file from bookmarks'
+- Update some macros with the improvements in GetTextEntry
+- A number of intervals can be specified directly now in the 'Bookmarks at Intervals' macro
+- Set the Large Address Aware flag
+- Python 2.6-2.7 is required now
+- Other minor changes and fixes
+
+
+Version 2.2.1 [2012-01-04]
+--------------------------
+
+- Pixel info remains in the statusbar while typing
+- Fixed bug in definition of assumefps/changefps/convertfps
+- Fixed bug with preview caching
+- Fixed a bug parsing some avsi files
+- Fixed a bug when removing plugins
+- Fixed a bug related to folding
+- Fixed a bug which caused slowdowns when incomplete string highlighting is enabled
+- Fixed a bug when opening a 2nd instance of avspmod
+- Added Shift bookmarks by # of frames macro by wOxxOm
+- Other minor bugfixes and tweaks
+
+
+Version 2.2.0 [2011-06-29]
+--------------------------
+
+- Reorganized several menus and changed some default settings to improve usability.
+- Tabs can be repositioned and renamed.
+- Scripts can be encoded without saving.
+- Improvements to macros.
+- When moving cursor on the preview, show pixel information even if the preview isn't focused.
+- Frame number textbox can accept mm:ss format, and you can input -1 to go to the last frame.
+- User sliders can have their values rescaled.
+- MANY minor bugfixes and improvements
+
+
+Version 2.1.8 [2011-06-02]
+--------------------------
+
+- When text has changed, left-clicking the video preview will refresh the preview
+- Fixed pressing enter while in a text box in slider window not updating the video preview
+- Add an option 'Refresh preview automatically' to 'Options|Program settings|Video 1'. If disabled, switching focus to the video preview or changing sliders wont cause a refresh
+- Fixed an issue with mouse release errors
+
+
+Version 2.1.7.1 [2011-05-27]
+----------------------------
+
+- Fixed a bug when changing shortcuts
+
+
+Version 2.1.7 [2011-05-27]
+--------------------------
+
+- Fixed garbage data displayed on shortcut labels
+- Fixed wrong checked/unchecked status for 'Flip' menu items.
+- Improve menu item 'Hide the preview' to 'Show/Hide the preview.
+- Fixed missing customized function presets (This situation happened if an uninstalled plugin is not in filterdb.dat and has no customized definition. Now, avsp will check and keep its definiton as customized definition to avoid missing its preset. If the reason is from renaming, you can copy old preset to new one and then delete. But, leaving it there is also harmless.)
+
+
+Version 2.1.6 [2011-05-23]
+--------------------------
+
+- Add 'Show autocomplete with variables' to 'Program setting|Text2'. AvsPmod will parse the script and add variable names to the autocomplete list.
+- Add 'Show autocomplete on single matched' to 'Program setting|Text2'. This can be helpful when using lowercase, such as for a variable name.
+- Add 'Show autocomplete with icons' to 'Program setting|Text2'. This should be helpful to decide which key is better to finish autocomplete, <Enter> or <Tab>. There are 3 different types of icon to indicate how well a filter's preset is defined:
+  - OK icon: well-defined (100%)
+  - Smile icon: good (>70%)
+  - None: 30-70%
+  - Question icon: bad (<30%)
+- Remove "Allow hyphen in identifier" and also remove illegal long names from autocomplete list.
+- Add 'ESC' into "Configure shortcuts->Advanced". If checked, one press doesn't run shortcut command when autocomplete or calltip is active. A second press is needed. If unchecked, directly run command. Default: unchecked.
+- Add "Show warning on bad plugin naming" to "Program settings->Misc". If plugin dll files contain characters other than alphanumeric or underscore, it will be suggested that you rename them.
+- Allow autocomplete auto active on starting with underscore if there are matched words existing.
+- When autocomplete or calltip is active, pressing related shortcut again will cancel it.
+- Fixed an issue with filenames in the encoding gui.
+
+
+Version 2.1.5 [2011-05-17]
+--------------------------
+
+- "Configure shortcuts" has been improved
+- Add 'Zoom in' & 'Zoom out' to 'Zoom' menu
+- If AvsPmod failed to load avisynth.dll, suggest user to install/reinstall avisynth
+- Fixed regression from 2.1.4 where some options would reset to default values
+- Fixed various bugs related to autocomplete and syntax highlighting
+- Add option 'Amount of letters typed' at 'Program settings|Text1'. It is active when 'Show autocomplete on capital letters' is enabled.
+
+
+Version 2.1.4 [2011-05-09]
+--------------------------
+
+- Added a checkbox 'Allow hyphen character in identifier' in 'Options|Program settings|Text 2'. If you notice any problems with this, try unchcking it, and please report the problem.
+- Auto recover session from an unexpected shutdown, even you disabled load session at startup.
+- 'Tab' key in the slider window is changed to navigate to the next control inside this window.
+- If a frame is already cached, don't call avisynth.dll function repeatedly.
+- Add a new menu item "Edit|aviSynth function|Autocomplete all <Alt+Space>" It brings up the FULL autocomplete list, even if you have customized the list.
+- Add a new menu item "Edit|Style comment Alt+Q"
+- Add the link of avspmod thread on doom9's forum to 'About' dialog.
+- Add numpad+ and numpad- shortcuts for Zoom.
+- Add an option to set color of fold margin in "Options|Fonts and colors|Advanced".
+- Modified the way shortcuts are handled. Shortcuts involving the escape key are no longer global shortcuts.
+- Changed some default shortcuts. If you are using an old options.dat, you may need to set these manually:
+    - Shift+Tab is now unindent selection
+    - Esc now shifts focus between text and video
+
+
+Version 2.1.3 [2011-04-27]
+--------------------------
+
+- Fixed some bugs related to dlls with underscores
+- Replaced 'DLL underscored' textbox with a button to bring up a dialog. Add a checkbox on it to turn on/off auto-detect routine.
+
+
+Version 2.1.2 [2011-04-25]
+--------------------------
+
+- Add a menu item "Copy avisynth error to clipboard" in "Edit|Miscellaneous". OCR text macro is no longer needed.
+- Add an option "Find within a word to show autocomplete" at menu "Options|Program settings|Text 1"
+- "save bookmarks to images" macro now lets you specify a jpeg quality level
+- Fixed some bugs with function definitions that have underscores in their name
+- Added 'Bookmarks at Interval' macro
+- Added 'Random clip order' macro
+- Add a text entry "DLL underscored" in "Options|AviSynth function definition...|Plugin tab". There may be some rare cases where a dll with an underscore in its name does not autodetect properly. These situations can be resolved by manually putting the base names into this box.
+
+
+Version 2.1.1 [2011-04-17]
+--------------------------
+
+- Fixed bug with saving images introduced in 2.1.0
+
+
+Version 2.1.0 [2011-04-17]
+--------------------------
+
+- Support code folding on block-comment and end-comment.
+- If ESC isn't defined as a shorcut, don't register it as a system hotkey.
+- New option "Draw lines at fold points" in menu "Options|Program settings|Text 2".
+- New macro "Save Image Sequence"
+- Saving an image as .jpg now prompts the user to specify the quality level
+- Forgot to include avs2avi in the past several versions, it has returned.
+
+
+Version 2.0.9 [2011-04-14]
+--------------------------
+
+- Code folding at curly braces {}. May be improved later.
+- Added an option 'show tabs in multiline style' in 'Options|Program settings|Misc'
+- Added "copy as time" to the frame number text box
+- Added an option "Don't preview when loading a session" in 'Options|Program settings|Video 1'
+- If 'paranoia' mode turned on, don't preview when loading a session
+- 'Save bookmarks to images' macro updated to support more image formats besides just bmp
+- Many bugfixes
+
+
+Version 2.0.8 [2011-03-20]
+--------------------------
+
+- Customize the autocomplete list (options>Text1)
+- Support c-style comment '/*...*/', nesting comment '[*...[*...*]...*]' and keyword comment '__END__'
+- No delay when zooming
+- A new control '\T\T' helps prevent truncation of status bar information
+- Frame count text turns red if the current position is a bookmark
+- Draw a blue triangle for a titled bookmark
+- Fix delay when using many bookmarks
+- Change the behaivor of clicking on a calltip to close it. Clicking with ALT/CTRL/SHIFT to open the URL
+- Keep user's frame/time input in right-click context menu when focus is lost
+- Added "Flip" menu to flip the output display
+- Added "SwapUV" to the RGB->YUV menu
+- New "Save bookmarks to bmp" macro
+- Added/Updated some plugin function definitions
+
+
+Version 2.0.7 [2011-03-01]
+--------------------------
+
+- Function definitions can be imported from avs/avsi files.
+- Many new bookmarking features including titles and matroska importer
+- Error messages can be grabbed using OCR via a macro
+- More formats for saving images
+- YUV->RGB menu for selecting different color matrix for preview
+- Removed menu item for associating with avs files, because it doesn't work on most operating systems
+- Several small changes and bugfixes
+
+
+Version 2.0.6 [2011-02-11]
+--------------------------
+
+- Updated the code base to be compatible with Python 2.7 and wxPython 2.8
+- Rework the code causing customized filter definitions lost
+- Add a new 'using Dissolve' option for trim dialog.
+- Shortcuts dialog is resizable, no longer displays an error
+- Fix 'tab' character having the wrong width when using monospaced font
+- Build process has been simplified
+- Many other minor bugfixes and changes
+- Several user function definitions contributed by RiCON
+
+
+Version 2.0.5 [2010-04-10]
+--------------------------
+
+- Updated defaults for 14 core filters, and added a handful of definitions for some userscripts
+- Restored the mp4 encoding tool, as I had mistakenly decided that it was broken. In fact, only the presets were outdated. I have included new x264 presets, and also added the ability to set a CRF rather than a bitrate.
+- Added new macro which lets you create a chapter list from your bookmarks. AvsPmod is now a great tool for creating matroska chapter files.
+- Added new menu items: 'Open Avisynth plugins folder' & 'Open macros folder'
+
+
+Version 2.0.4 [2010-03-17]
+--------------------------
+
+- Fixed arrow keys not working in the text area
+- Fixed icon not appearing in vista/7
+- Fixed custom function definitions not being saved (bug existed in avsp 2.0.2) [this fix may introduce a new bug]
+- Included MSVCP71.dll, which may be needed on some systems
+- Added some additional default file extension templates
+- Added some macros
+
+
+Version 2.0.3 [2010-03-08]
+--------------------------
+
+- Fixed clipboard data being deleted when closing AvsP
+- Included avs2avi.exe
+- Removed outdated encoding gui from the tools menu
+
+
+Version 2.0.2 [2007-10-27]
+--------------------------
+
+- Added numerous entries to function database (contributions by Harukalover, danielkun)
+- Added ability to open multiple scripts in Open dialog (suggested by Underground78)
+- New syntax in extension templates for relative paths (suggested by krisq)
+- Changed database editing for plugins to reduce redundancy with short and long names
+- Fixed program hanging on text highlight (thanks miamicanes, Harukalover, foxyshadis)
+- Fixed issue with translation messages (thanks zemog)
+- Fixed crash when deleting existing bookmark (thanks AlanHK)
+- Manually hidden sliders now stay hidden on video refresh (thanks AlanHK)
+- Fixed minor bug with autocompletion and underscore character
+
+
+Version 2.0.1 [2007-09-16]
+--------------------------
+
+- Improved automatic user slider construction (suggested by AlanHK, bidmead)
+- Added line number traceback for macro errors (suggestedy by foxyshadis)
+- Disabled error line highlight when line-by-line update enabled (suggested by Zarxrax)
+- Added warnings to crop editor for invalid crop values (suggested by AlanHK)
+- Brought back shortcuts for function definitions in script menu (suggested by Alain2)
+- Added close all tabs function (suggested by Serbianboss)
+- Added option to disable scroll wheel through tabs (suggested by foxyshadis)
+- Added option to disable frames for each tab (suggested by Harukalover)
+- Changed autocomplete to show single item lists (suggested by Alain2)
+- Changed title for separate video window to full script name (suggeseted by Alain2)
+- Fixed minor error when configuring shortcuts (thanks RedDwarf1, krisq)
+- Fixed next bookmark function to always search forward (thanks AlanHK)
+- Changed "True" and "False" in database to lowercase (thanks AlanHK)
+- Fixed typo in options dialog (thanks AlanHK)
+- Fixed bug with manual activation of filter help (thanks Alain2)
+- Fixed bug with macro functions GetWidth/GetHeight returning zoomed values (thanks Alain2)
+- Fixed display issue with slider window and zoom window fit (thanks rfmmars)
+
+
+Version 2.0.0 [2007-08-29]
+--------------------------
+
+- Fully automatic user sliders (enabled by default in this release)
+- Added default presets for each filter (suggested by Zarxrax)
+- New "Tools" directory designed for AvsP plugins (suggested by Rahima, Fizick)
+- New resize calculator tool (suggested by chipzoller)
+- New encoder tool supporting any command line encoders (through presets)
+- Script tabs now keep track of their own frames
+- Added new side button to toggle sliders
+- Added reminder images in the script tabs when video has focus
+- Added several new configurable text colors
+- Improved filter documentation filename searching
+- Added configurable web search for filter docs whenever local docs not found
+- Changed external player to use original script whenever possible
+- Changed program to open socket for single instance check only when necessary
+- Improved rules for displaying calltips
+- Improved macros menu organization with submenus defined by subdirectories
+- Improved SetBookmark() macro performance with large lists (suggested by AlanHK)
+- Fixed calltip bug with parentheses inside string (thanks niiyan)
+- Fixed calltip bug with filters with zero arguments (thanks niiyan)
+- Fixed calltip bug with "Frequent calltips" turned off (thanks Alain2)
+- Fixed asterisk on title bar in separate video window (thanks krisq)
+- Fixed color customization to allow non-white default background (thanks RedDwarf1)
+- Fixed open with unicode filename bug (thanks Zarxrax)
+
+
+Version 1.4.0 [2007-06-05]
+--------------------------
+
+- Fully automatic sliders (experimental, turned off by default)
+- Simplified translation update procedure (suggested by Henrikx)
+- Added option for single instance (suggested by krisq, foxyshadis)
+- Added source extension filters to "Open..." dialog (suggested by 3ngel)
+- Changed default filename to work with unknown extensions (suggested by Zarxrax)
+- Opening an already opened file prompts for reload if changes exist (suggested by Kuukunen)
+- Toggle scrap window now works when scrap window focused (thanks AlanHK)
+- Changed error message when Avisynth fails to load video (thanks lolent)
+- Added macro for setting bookmarks (suggested by AlanHK)
+- Sliders no longer generated on error clips
+- Improved filter calltips to work with script line breaks
+- Added clear all text option for scrap window
+- Minor improvements to window layout code
+- Fixed translation import problem (thanks Henrikx)
+- Fixed bug with AvsP installed in directory with unicode characters (thanks Aeolis)
+- Fixed display bug when resizing the script window with separate video window (thanks Alain2)
+- Fixed several unicode bugs (thanks Zarxrax)
+- Fixed crash when avisynth output has no video
+
+
+Version 1.3.9 [2007-05-05]
+--------------------------
+
+- Remember the last saved image path (suggested by 3ngel)
+- Changed "Show calltip" to work when cursor is in filter name (thanks AlanHK)
+- Changed editor to properly clear undo buffer when loading a file
+- Merged windows xp and 98 versions
+- Fixed parity info reported by AvsP (thanks krisq, ChiDragon)
+- Fixed crash when switching zoom modes (thanks Alain2)
+- Fixed unnecessary scrollbars with zoom "fit inside window" (thanks foxyshadis)
+- Fixed unicode bug when saving script
+- Fixed unicode bug with recent file list (thanks Henrikx)
+- Fixed unicode bug with Avisynth install directory (thanks Aeolis, foxyshadis)
+- Minor fixes to window layout code
+
+
+Version 1.3.8 [2007-04-24]
+--------------------------
+
+- Changed display code to retrieve frames directly from Avisynth (contributed by tsp)
+- Highlight error line in script on error clip
+- Added new video zoom option to fit entirely inside the window (suggested by Alain2)
+- Added "always on top" option for main window (suggested by Alain2)
+- Added method to specify cursor position in filter presets (suggested by krisq)
+- Allow for global variables in macros (suggested by Eggroll)
+- Remember last path when configuring doc path/url for function help (suggested by Spuds)
+- Path to AvsP help directory now configurable (suggested by Fizick)
+- Dump program error messages to both window and log file for easier bug reporting
+- Fixed unicode error on startup (thanks Spuds)
+- Fixed unicode error on file open (thanks martino)
+- Fixed bug with avs2avi gui and spaces in avs filename (thanks tony62)
+- Accurate yuv colors reported in video status bar (thanks jmac698)
+- Minor fixes to window layout code
+
+
+Version 1.3.7 [2007-03-07]
+--------------------------
+
+- Make up/down/left/right video shortcuts editable (suggested by Alain2, avid_avs_user)
+- Removed modifier restrictions for keyboard shortcuts (suggested by avid_avs_user)
+- Allow language translation for Ctrl, Alt, Shift (suggested by Henrikx)
+- Added menu items for trim selection start/end (suggested by avid_avs_user)
+- Added ability to export/import individual filter presets (suggested by krisq)
+- Added pixel position and color information to status bar (suggested by nibbles, jmac698)
+- Added macro to get filter info from avisynth (needs Avisynth 2.5.7+) (contributed by tsp)
+- Added ability to label user slider separators (suggested by R3Z)
+- Added ability to free all script videos from memory (suggested by foxyshadis)
+- Use the source filename as default in the file save dialog (suggested by Zarxrax)
+- Updated extension-based templates with .dga files and AVCSource() (suggested by unskinnyboy)
+- Added option to not prompt to unsaved scripts on program exit (suggested by foxyshadis)
+- Added several help menu items linking to website documentation
+- Improved subwindow layout management
+- Improved calltip displaying during window focus/motion
+- Minor changes to the display code
+- Fixed issues with syntax highlighting default style (thanks Alain2)
+- Fixed bug with unicode characters in script (thanks Spuds)
+- Added workaround for top-level variables in macros (thanks tsp)
+- Fixed minor bug when switching from zoom fit to regular zoom
+- Fixed several subwindow positioning issues
+
+
+Version 1.3.6 [2007-02-20]
+--------------------------
+
+- Saved files no longer lose user slider/toggle tag info (suggested by foxyshadis)
+- Prompt to reload modified files when loading a session (suggested by foxyshadis)
+- Added visual bookmarks along the video slider (suggested by doxville, avid_avs_user)
+- Added trim selection editor (suggested by Zarxrax, doxville, avid_avs_user)
+- Added option to not load bookmarks on startup (suggested by avid_avs_user)
+- Added crop editor options to insert at cursor, copy to clipboard (suggested by krisq)
+- Improved end of script detection for crop editor
+- Reorganized video menu for clarity (suggested by avid_avs_user)
+- Improved save image dialog with specific extensions (suggested by foxyshadis)
+- Created windows 98 version (suggested by affter333)
+- Fixed crash when creating a new tab while crop editor is shown
+- Fixed small bug on program exit with multi-monitor setup (thanks foxyshadis)
+- Fixed several issues with syntax highlighting (thanks Alain2)
+
+
+Version 1.3.5 [2007-01-14]
+--------------------------
+
+- Added more font and color options (suggested by Alain2)
+- Added customizable keyword lists (suggested by Alain2)
+- Updated filter information with internal clip properties and functions
+- Improved autocompletion for functions with no arguments
+- Added several new macro functions (ExecuteMenuCommand, GetBookmarkList, GetAvs2aviDir, GetSliderTexts)
+- Added slider optimization macro with complete genetic algorithm implementation
+- Added option to associate .avs files with AvsP (suggested by foxyshadis, JoeTF)
+- Fixed minor issue with potential conflicting keyboard shortcuts (thanks Alain2)
+
+
+Version 1.3.4 [2006-12-16]
+--------------------------
+
+- Support for separate video window zoom fit
+- Updated included core filter definitions to AviSynth v2.56
+- Added menu options for goto next/previous bookmark (suggested by Alain2)
+- Option to quickly show AviSynth function definition dialog (suggested by Alain2)
+- Added new tag for separators in slider window (suggested by krisq)
+- Minor rearrangement of menu items for clarity (suggested by Fizick)
+- Fixed several issues with zoom fit feature (thanks foxyshadis, zemog, doxville, Alain2)
+- Fixed small bug with slider validation (thanks zemog)
+
+
+Version 1.3.3 [2006-11-14]
+--------------------------
+
+- Added video preview zoom to fit window (suggested by Alain2)
+- Remember last zoom setting on startup
+- Added small indicator when zoom not at 100%
+- Added right-click menu to script tabs (suggested by zemog)
+- Added video custom jump size (suggested by Alain2)
+- Register all keyboard shortcuts with separate video window (suggested by krisq)
+- Improved auto-fit for separate video window (suggested by foxyshadis)
+- Updated about box with website info (suggested by krisq)
+- Added extra validation for user sliders (suggested by Naito)
+- Prevent showing preview on startup if script causes hard crash (suggested by jmac698)
+- Fixed positioning issues for multi-monitor setup (thanks foxyshadis)
+- Fixed bug with manual autocomplete on number (thanks Alain2)
+- Fixed small bug with offscreen window layout code (thanks Alain2)
+- Fixed issue with saving files with unicode text and line breaks (thanks Naito)
+- Allow tab as keyboard shortcut for separate video window (thanks krisq)
+
+
+Version 1.3.2 [2006-11-02]
+--------------------------
+
+- Added option to make video preview a separate window
+- Added option to quickly backup the current session (suggested by foxyshadis)
+- Added "paranoia mode" to backup the current session whenever video is refreshed
+- Increased size of window dividers to make easier to click (suggested by Alain2)
+- Change autoparentheses levels option labels to be clearer (suggested by Alain2)
+- Added option to set minimum text window size (suggested by foxyshadis)
+- Added option to not focus video window when refreshing (suggested by krisq)
+- Added ability to clear a shortcut in the shortcut editor
+- Minor improvements to line-by-line update mode
+- Improved to multi-monitor support
+- Fixed bug with dragging crop edges (thanks krisq)
+- Fixed left-click to focus video window (thanks krisq)
+- Fixed autocomplete before operator (thanks foxyshadis)
+- Fixed bug with remembering program size when maximized (thanks krisq)
+
+
+Version 1.3.1 [2006-10-24]
+--------------------------
+
+- Click and drag video preview similar to Acrobat Reader
+- Store last program size and position (suggested by Alain2)
+- Minor improvements to window layout code
+- Refresh video appropriately when creating new scripts
+- Fixed bug with unicode characters in slider labels (thanks Rippraff)
+
+
+Version 1.3.0 [2006-10-23]
+--------------------------
+
+- Rewrote entire layout code, size-adjustable subwindows
+- Make cursor visible when using shift-tab shortcut (suggested by Alain2)
+- Option to show full pathname on program title (suggested by Alain2)
+- Filter help shortcut now works when cursor within filtername (suggested by Alain2)
+- Don't change position when disabling preview (suggested by Alain2)
+- Added option to allow multi-line non-triple strings (thanks Alain2)
+- Option to use actual avs script with external preview (suggested by Alain2)
+- Added ability to copy script to clipboard (suggested by communist)
+- Fixed minor bug with calltip and selecting text
+- Fixed status bar message for 25% and 50% zoom
+
+
+Version 1.2.1 [2006-10-07]
+--------------------------
+
+- Custom syntax highlighter, more than 30 individually configurable fonts/colors
+- Added ability to override all fonts with a monospaced font (suggested by Richard Berg)
+- Added recent files menu (suggested by check)
+- Added shortcut for moving lines up/down (suggested by communist)
+- Added method to disable video preview (suggested by Alain2)
+- Added option to specify initial line margin width (suggested by nibbles)
+- Added optional arguments to pass to external player
+- Updated several macro functions, see new examples and macros_readme.txt for info
+- Added option to disable frequent calltips, show only upon typing open parentheses
+- Added ability to use keyboard shortcut for filter help file (suggested by Alain2)
+- Added option to wrap the text (suggested by Alain2)
+- Added option to highlight current line (suggested by Alain2)
+- Added 25% and 50% zoom levels (suggested by communist)
+- Moved line-by-line update mode to menu option, to allow for keyboard shortcut
+- Changed data format for options files to editable text files
+- Fixed minor bug with improper video updating (thanks nibbles)
+- Fixed small mistakes with some messages (thanks zemog)
+- Fixed minor bug with tabs and spaces
+- Fixed minor bug with session saving/loading
+- Cleaned up minor issues with tooltip code
+
+
+Version 1.2.0 [2006-10-02]
+--------------------------
+
+- Customizable keyboard shortcuts (suggested by Zarxrax)
+- Aspect ratio info on status bar in video mode (suggested by krisq)
+- Added option for constant video update when dragging (suggested by doxville)
+- Added option for line-by-line video preview update (suggested by Zarxrax)
+- Center window when it goes off the screen (suggested by Ebobtron)
+- Added ability to mark and add trim selections (suggested by doxville)
+- Make shortcut Ctrl-G highlight frame text ctrl (suggested by Champs)
+- Copy a script by double-clicking the tab (suggested by Zarxrax)
+- Added options for using text tabs, tab length (suggested by foxyshadis)
+- Auto save session on exit, load on startup if no args (suggested by foxyshadis)
+- Minor improvements to calltip argument highlight code (suggested by tsp)
+- Minor improvements to avs2avi frontend
+- Fixed bug in "Options -> Settings" dialog (thanks nibbles)
+- Fixed bug with avs2avi frontend and translation (thanks Fizick)
+- Fixed error when right-clicking a popup tooltip (thanks Zarxrax)
+- Fixed bug saving .avsi file with .avs extension (thanks foxyshadis)
+
+
+Version 1.1.6 [2006-09-26]
+--------------------------
+
+- Added ability to specify a file or url for AviSynth help (suggested by Fizick)
+- Added shortcut Shift-Tab to switch focus between the text and video (suggested by krisq)
+- Fixed bug with one frame long video (thanks mkanel)
+- Fixed read from avsfilters.txt feature (thanks mkanel)
+- Fixed minor bug with Replace and Find Next (thanks mkanel)
+- Cleaned up calltip and argument highlight code to be more robust
+
+
+Version 1.1.5 [2006-09-23]
+--------------------------
+
+- Show filter documentation by clicking the calltip (suggested by Fizick)
+- Toggle portions of script text (suggested by Dr. D)
+- Now possible to specify modulo values with user sliders (suggested by krisq)
+- Remember path of last saved session (suggested by Dr. D)
+- Reworked filter presets to be easier to edit
+- Fixed mouse wheel tab switching when zoomed (thanks Dr. D)
+- Fixed text visibility issue when using Find or Find next (thanks mkanel)
+- Fixed small mistakes with some messages (thanks niiyan)
+- Fixed small bug with recentdir pathname
+- Fixed minor video preview window sizing issues
+- Fixed minor bug when closing the only tab
+
+
+Version 1.1.2 [2006-09-14]
+--------------------------
+
+- Highlight current argument in calltips (suggested by tsp)
+- Editing AviSynth filter info no longer requires program restart
+- Enable localization of program's interface language (suggested by Fizick)
+- Added popup messages to example macros to prevent confusion
+- Fixed issue with case-sensitive extensions (thanks midelic)
+- Cleaned up dynamic preview sizing code (thanks matrix)
+- Fixed some stray bugs with wx namespace
+- Fixed program association with .ses file
+
+
+Version 1.1.0 [2006-09-10]
+--------------------------
+
+- Scrolled window for user sliders (suggested by Mtz, mimage)
+- Buttons on user sliders for fine tuning (suggested by Mtz)
+- Click blue slider value to reset to initial value (suggested by Mtz, mimage)
+- Method for storing filter auto-complete presets (suggested by mimage)
+- Separate filters.dat (suggested by foxyshadis, Fizick)
+- Save all scripts as session with user sliders (suggested by Dr. D)
+- Preview zoom levels (suggested by Dr. D)
+- Validate unique slider name
+- Set initial maxWidth, maxHeight from user resolution
+- Fixed improper opening files of .avsi files (thanks mkanel)
+- Fixed minor issue with working dir when opening files (thanks krisq)
+- Fixed commented sliders (thanks vcmohan)
+- Fixed issue of multiple tabs of same filename
+- Fixed multi-calltip bug
+- Fixed off-screen calltips
+- Fixed float/integer issue with setting user slider value (thanks matrix)
+
+
+
+Version 1.0.4 [2006-09-06]
+--------------------------
+
+- Read in filter info from text file named "avsfilters.txt" (suggested by foxyshadis, tsp)
+- Popup calltips show whenever cursor is anywhere inside a filter's arguments (suggested by foxyshadis)
+- Calltips close on left mouse click in the text
+
+
+Version 1.0.3 [2006-09-04]
+--------------------------
+
+- Fixed issue with spaces in filenames when using external preview (thanks unskinnyboy, pookie)
+- Changed refresh keyboard shortcut to F5 (to be more similar to vdub), shift-F5 now hides the preview (suggested by Mug Funky)
+
+
+Version 1.0.2 [2006-09-04]
+--------------------------
+
+- First release
